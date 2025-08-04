@@ -1,46 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>O Esquimó - Climatização Profissional</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>O Esquimó - Ar-Condicionado</title>
+  <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-  <!-- Topo Fixo -->
-  <header class="header">
-    <div class="header-content">
+
+  <!-- Topo com imagem de fundo e frase -->
+  <header class="topo-site">
+    <div class="overlay">
       <h1>O Esquimó</h1>
-      <p>Climatização Profissional</p>
+      <p>Instalação com preço justo, garantia e a qualidade que você merece.</p>
     </div>
   </header>
 
-  <!-- Banner Principal -->
-  <div class="banner">
-    <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico trabalhando" class="banner-img">
-  </div>
+  <!-- Chamada para escolher serviço -->
+  <section class="chamada-servico">
+    <h2>Escolha o serviço e gere seu orçamento</h2>
+    <p>Selecione um dos serviços abaixo para começar.</p>
+  </section>
 
-  <!-- Serviços -->
-  <section class="services">
-    <div class="service-card" onclick="selecionarServico('Instalação')">
-      <img src="assets/imagens/instalacao-ar.jpg" alt="Instalação">
-      <h3>Instalação</h3>
+  <!-- Seção de imagens clicáveis para serviços -->
+  <section class="servicos-imagens container">
+    <div class="servico" data-servico="Instalação">
+      <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
+      <p>Instalação</p>
     </div>
-    <div class="service-card" onclick="selecionarServico('Limpeza Split')">
-      <img src="assets/imagens/limpeza-split.jpg" alt="Limpeza">
-      <h3>Limpeza</h3>
+    <div class="servico" data-servico="Limpeza Split">
+      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza Split" />
+      <p>Limpeza Split</p>
     </div>
-    <div class="service-card" onclick="selecionarServico('Manutenção')">
-      <img src="assets/imagens/manutencao-ar.jpg" alt="Manutenção">
-      <h3>Manutenção</h3>
+    <div class="servico" data-servico="Manutenção">
+      <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
+      <p>Manutenção</p>
     </div>
   </section>
 
-  <!-- Formulário (MANTIDO ORIGINAL) -->
-  <div class="container" id="formulario">
-    <!-- Todo o conteúdo do seu formulário original aqui -->
+  <!-- Formulário de orçamento -->
+  <div class="container">
+    <h2>Orçamento de Serviço - O Esquimó</h2>
+    <form id="formulario" novalidate>
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" required />
+      <div class="error-message" id="erro-nome"></div>
+
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" required />
+      <div class="error-message" id="erro-endereco"></div>
+
+      <label for="whatsapp">WhatsApp:</label>
+      <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" required />
+      <div class="error-message" id="erro-whatsapp"></div>
+
+      <label for="servico">Tipo de Serviço:</label>
+      <select id="servico" required>
+        <option value="">Selecione</option>
+        <option value="Instalação">Instalação</option>
+        <option value="Limpeza Split">Limpeza Split</option>
+        <option value="Limpeza Janela">Limpeza Janela</option>
+        <option value="Manutenção">Manutenção</option>
+      </select>
+      <div class="error-message" id="erro-servico"></div>
+
+      <label for="btus">Capacidade em BTUs:</label>
+      <select id="btus" required>
+        <option value="">Selecione</option>
+        <option value="9000">9.000</option>
+        <option value="12000">12.000</option>
+        <option value="18000">18.000</option>
+        <option value="24000">24.000</option>
+        <option value="30000">30.000</option>
+      </select>
+      <div class="error-message" id="erro-btus"></div>
+
+      <div id="relatorio" style="margin-top: 20px; white-space: pre-line; background: #e6f2ff; padding: 10px; border-left: 5px solid #0055aa;"></div>
+
+      <button type="button" id="enviarBtn" disabled>ENVIAR ORÇAMENTO</button>
+    </form>
   </div>
 
-  <script src="assets/js/script.js"></script>
+  <script src="assets/script.js"></script>
 </body>
 </html>
