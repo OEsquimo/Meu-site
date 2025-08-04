@@ -1,7 +1,25 @@
+/**
+ * SISTEMA DE ORÇAMENTOS - O ESQUIMÓ
+ * Versão 2.0 (Correção e Otimização)
+ * Funcionalidades originais mantidas:
+ * 1. Máscara de WhatsApp automática
+ * 2. Cálculo de valores por serviço/BTU
+ * 3. Validação de formulário
+ * 4. Geração de relatório
+ * 5. Integração com WhatsApp
+ */
 
 document.addEventListener("DOMContentLoaded", function() {
-  // Elementos
-  const form = document.getElementById("form-orcamento");
+  // ========== CONSTANTES ========== //
+  const SEU_WHATSAPP = "5581983259341"; // Substitua pelo seu número
+  const PRECOS = {
+    "Instalação": { "9000": 500, "12000": 600, "18000": 700 },
+    "Limpeza Split": { "9000": 180, "12000": 230, "18000": 280 },
+    "Manutenção": "Sob consulta"
+  };
+
+  // ========== SELEÇÃO DE ELEMENTOS ========== //
+  const form = document.getElementById("formulario");
   const enviarBtn = document.getElementById("enviarBtn");
   const relatorioDiv = document.getElementById("relatorio");
   const nomeInput = document.getElementById("nome");
@@ -10,133 +28,96 @@ document.addEventListener("DOMContentLoaded", function() {
   const servicoSelect = document.getElementById("servico");
   const btusSelect = document.getElementById("btus");
 
-  // Configurações
-  const seuWhatsApp = "SEU_NUMERO_AQUI"; // Ex: "5511987654321" (sem espaços ou caracteres especiais)
-  const precos = {
-    "Instalação": { "9000": 500, "12000": 600, "18000": 700 },
-    "Limpeza Split": { "9000": 180, "12000": 230, "18000": 280 },
-    "Manutenção": "Sob consulta"
-  };
-
-  // Máscara de WhatsApp
+  // ========== MÁSCARA DE WHATSAPP ========== //
   whatsappInput.addEventListener("input", function(e) {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.length > 11) value = value.slice(0, 11);
+    let valor = e.target.value.replace(/\D/g, "");
+    if (valor.length > 11) valor = valor.slice(0, 11);
     
-    if (value.length > 6) {
-      e.target.value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7)}`;
-    } else if (value.length > 2) {
-      e.target.value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-    } else if (value.length > 0) {
-      e.target.value = `(${value}`;
+    // Formatação: (XX) XXXXX-XXXX
+    if (valor.length > 6) {
+      e.target.value = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7)}`;
+    } else if (valor.length > 2) {
+      e.target.value = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
+    } else if (valor.length > 0) {
+      e.target.value = `(${valor}`;
     }
   });
 
-  // Validação em tempo real
+  // ========== VALIDAÇÃO EM TEMPO REAL ========== //
   form.addEventListener("input", function() {
-    const camposValidos = (
-      nomeInput.value.trim() !== "" &&
-      enderecoInput.value.trim() !== "" &&
-      /^\(\d{2}\) \d{5}-\d{4}$/.test(whatsappInput.value) &&
-      servicoSelect.value !== ""
-    );
-    
+    const camposValidos = validarCampos();
     enviarBtn.disabled = !camposValidos;
     atualizarRelatorio();
   });
 
-  // Atualiza relatório
+  // ========== VALIDAÇÃO COMPLETA ========== //
+  function validarCampos() {
+    return (
+      nomeInput.value.trim() !== "" &&
+      enderecoInput.value.trim() !== "" &&
+      /^\(\d{2}\) \d{5}-\d{4}$/.test(whatsappInput.value) &&
+      servicoSelect.value !== "" &&
+      (servicoSelect.value !== "Limpeza Split" || btusSelect.value !== "")
+    );
+  }
+
+  // ========== ATUALIZA RELATÓRIO ========== //
   function atualizarRelatorio() {
-    if (nomeInput.value && enderecoInput.value && whatsappInput.value && servicoSelect.value) {
-      const servico = servicoSelect.value;
-      const btus = btusSelect.value;
-      let valor = calcularValor();
-      
-      relatorioDiv.innerHTML = `
-        *ORÇAMENTO DETALHADO*
-        👤 Nome: ${nomeInput.value}
-        📍 Endereço: ${enderecoInput.value}
-        📱 WhatsApp: ${whatsappInput.value}
-        🛠️ Serviço: ${servico}
-        ❄️ BTUs: ${btus || "N/A"}
-        💰 Valor: ${valor}
-      `;
-    } else {
+    if (!validarCampos()) {
       relatorioDiv.innerHTML = "Preencha todos os campos para ver o orçamento";
+      return;
     }
+
+    const servico = servicoSelect.value;
+    const btus = btusSelect.value;
+    const valor = calcularValor(servico, btus);
+
+    relatorioDiv.innerHTML = `
+      *ORÇAMENTO DETALHADO*
+      👤 Nome: ${nomeInput.value}
+      📍 Endereço: ${enderecoInput.value}
+      📱 WhatsApp: ${whatsappInput.value}
+      🛠️ Serviço: ${servico}
+      ❄️ BTUs: ${btus || "N/A"}
+      💰 Valor: ${valor}
+    `;
   }
 
-  // Envio para WhatsApp
+  // ========== CÁLCULO DO VALOR ========== //
+  function calcularValor(servico, btus) {
+    if (servico === "Manutenção") return PRECOS[servico];
+    if (!btus || !PRECOS[servico] || !PRECOS[servico][btus]) return "A definir";
+    return `R$ ${PRECOS[servico][btus]}`;
+  }
+
+  // ========== ENVIO PARA WHATSAPP ========== //
   enviarBtn.addEventListener("click", function() {
-    if (!validarFormulario()) return;
-    
-    const mensagem = gerarRelatorio();
-    const url = `https://wa.me/${seuWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-    window.open(url, "_blank");
-  });
-
-  // Validação completa
-  function validarFormulario() {
-    let valido = true;
-    
-    if (nomeInput.value.trim() === "") {
-      alert("Por favor, insira seu nome completo!");
-      nomeInput.focus();
-      valido = false;
-    } else if (enderecoInput.value.trim() === "") {
-      alert("Por favor, insira seu endereço!");
-      enderecoInput.focus();
-      valido = false;
-    } else if (!/^\(\d{2}\) \d{5}-\d{4}$/.test(whatsappInput.value)) {
-      alert("WhatsApp inválido! Use o formato (DD) XXXXX-XXXX");
-      whatsappInput.focus();
-      valido = false;
-    } else if (servicoSelect.value === "") {
-      alert("Selecione um tipo de serviço!");
-      servicoSelect.focus();
-      valido = false;
+    if (!validarCampos()) {
+      alert("Preencha todos os campos corretamente!");
+      return;
     }
-    
-    return valido;
-  }
 
-  // Gera relatório para envio
-  function gerarRelatorio() {
-    return `
+    const mensagem = `
       *ORÇAMENTO SOLICITADO - O ESQUIMÓ*
       👤 Nome: ${nomeInput.value}
       📍 Endereço: ${enderecoInput.value}
       📱 WhatsApp: ${whatsappInput.value}
       🛠️ Serviço: ${servicoSelect.value}
       ❄️ BTUs: ${btusSelect.value || "N/A"}
-      💰 Valor: ${calcularValor()}
-      
-      _*Este é um orçamento preliminar. Entraremos em contato para confirmar detalhes._
+      💰 Valor: ${calcularValor(servicoSelect.value, btusSelect.value)}
+
+      _*Entraremos em contato para confirmar._
     `;
-  }
 
-  // Cálculo do valor
-  function calcularValor() {
-    const servico = servicoSelect.value;
-    const btus = btusSelect.value;
-    
-    if (servico === "Manutenção") {
-      return "Sob consulta (agendaremos visita técnica)";
-    }
-    
-    if (precos[servico] && precos[servico][btus]) {
-      return `R$ ${precos[servico][btus]}`;
-    }
-    
-    return "A definir (necessário verificar modelo)";
-  }
+    const url = `https://wa.me/${SEU_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
+  });
 
-  // Seleção por card (global)
+  // ========== SELEÇÃO POR IMAGEM ========== //
   window.selecionarServico = function(servico) {
     servicoSelect.value = servico;
-    form.dispatchEvent(new Event("input"));
-    document.getElementById("formulario").scrollIntoView({ 
-      behavior: "smooth" 
-    });
+    const event = new Event("change");
+    servicoSelect.dispatchEvent(event);
+    document.getElementById("formulario").scrollIntoView({ behavior: "smooth" });
   };
 });
