@@ -89,10 +89,15 @@ whatsappInput.addEventListener("input", function (e) {
   }
 
   // Validação WhatsApp
-  function validarWhatsApp(tel) {
-    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
-    return regex.test(tel);
-  }
+
+function validarWhatsApp(tel) {
+  const numeros = tel.replace(/\D/g, "");
+  return numeros.length === 10 || numeros.length === 11;
+}
+
+
+
+  
 
   // Mostrar erro (placeholder + borda vermelha)
   function mostrarErroInput(input, mensagem) {
