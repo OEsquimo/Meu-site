@@ -30,33 +30,19 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });*/
 
-
+// Permite digitar livremente no WhatsApp sem máscara automática
 whatsappInput.addEventListener("input", function (e) {
-  let cursorPosition = this.selectionStart;
-  let oldValue = this.value;
-
-  // Remove tudo que não for número
-  let numbers = oldValue.replace(/\D/g, "");
-
-  if (numbers.length > 11) numbers = numbers.slice(0, 11);
-
-  let formattedValue = "";
-
-  if (numbers.length > 6) {
-    formattedValue = `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7)}`;
-  } else if (numbers.length > 2) {
-    formattedValue = `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
-  } else if (numbers.length > 0) {
-    formattedValue = `(${numbers}`;
+  // Apenas limita a 15 caracteres
+  if (this.value.length > 15) {
+    this.value = this.value.slice(0, 15);
   }
+});
 
-  this.value = formattedValue;
-
-  // Ajusta a posição do cursor para que ele não pule
-  if (cursorPosition < this.value.length) {
-    this.setSelectionRange(cursorPosition, cursorPosition);
-  } else {
-    this.setSelectionRange(this.value.length, this.value.length);
+// Ao sair do campo, formata (opcional)
+whatsappInput.addEventListener("blur", function (e) {
+  let v = this.value.replace(/\D/g, "");
+  if (v.length === 11) {
+    this.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
   }
 });
 
