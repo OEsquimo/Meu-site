@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Orçamento - O Esquimó</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
@@ -17,47 +17,55 @@
   <section class="servicos-imagens container">
     <h2>Escolha o serviço e gere seu orçamento</h2>
 
-    <div class="servico" data-servico="Instalação" tabindex="0" role="button" aria-label="Selecionar serviço Instalação">
+    <div class="servico" data-servico="Instalação">
       <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
       <p>Instalação</p>
     </div>
 
-    <div class="servico" data-servico="Limpeza Split" tabindex="0" role="button" aria-label="Selecionar serviço Limpeza Split">
-      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza Split" />
+    <div class="servico" data-servico="Limpeza Split">
+      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza" />
       <p>Limpeza Split</p>
     </div>
 
-    <div class="servico" data-servico="Manutenção" tabindex="0" role="button" aria-label="Selecionar serviço Manutenção">
+    <div class="servico" data-servico="Manutenção">
       <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
       <p>Manutenção</p>
     </div>
   </section>
 
   <div class="container">
-    <form id="formulario">
-      <label for="nome">Nome:</label>
-      <input type="text" id="nome" required />
-      <div class="error-message" id="erro-nome"></div>
+    <form id="formulario" novalidate>
+      <div class="campo">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" required />
+        <span class="error-message" id="erro-nome"></span>
+      </div>
 
-      <label for="endereco">Endereço:</label>
-      <input type="text" id="endereco" required />
-      <div class="error-message" id="erro-endereco"></div>
+      <div class="campo">
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" required />
+        <span class="error-message" id="erro-endereco"></span>
+      </div>
 
-      <label for="whatsapp">WhatsApp:</label>
-      <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" required />
-      <div class="error-message" id="erro-whatsapp"></div>
+      <div class="campo">
+        <label for="whatsapp">WhatsApp:</label>
+        <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" required />
+        <span class="error-message" id="erro-whatsapp"></span>
+      </div>
 
-      <label for="servico">Tipo de Serviço:</label>
-      <select id="servico" required>
-        <option value="">Selecione</option>
-        <option value="Instalação">Instalação</option>
-        <option value="Limpeza Split">Limpeza Split</option>
-        <option value="Limpeza Janela">Limpeza Janela</option>
-        <option value="Manutenção">Manutenção</option>
-      </select>
-      <div class="error-message" id="erro-servico"></div>
+      <div class="campo">
+        <label for="servico">Tipo de Serviço:</label>
+        <select id="servico" required>
+          <option value="">Selecione</option>
+          <option value="Instalação">Instalação</option>
+          <option value="Limpeza Split">Limpeza Split</option>
+          <option value="Limpeza Janela">Limpeza Janela</option>
+          <option value="Manutenção">Manutenção</option>
+        </select>
+        <span class="error-message" id="erro-servico"></span>
+      </div>
 
-      <div id="campo-btus" style="display: none;">
+      <div class="campo" id="campo-btus" style="display: none;">
         <label for="btus">Capacidade em BTUs:</label>
         <select id="btus">
           <option value="">Selecione</option>
@@ -67,10 +75,10 @@
           <option value="24000">24.000</option>
           <option value="30000">30.000</option>
         </select>
-        <div class="error-message" id="erro-btus"></div>
+        <span class="error-message" id="erro-btus"></span>
       </div>
 
-      <div id="campo-defeito" style="display: none;">
+      <div class="campo" id="campo-defeito" style="display: none;">
         <label for="defeito">Descreva o defeito do ar-condicionado:</label>
         <textarea id="defeito" rows="4"></textarea>
       </div>
