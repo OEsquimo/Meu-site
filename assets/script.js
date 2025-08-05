@@ -32,31 +32,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 whatsappInput.addEventListener("input", function (e) {
-  let input = e.target;
-  let position = input.selectionStart; // salva posição do cursor
+  let cursorPosition = this.selectionStart;
+  let oldValue = this.value;
 
-  let v = input.value.replace(/\D/g, "");
-  if (v.length > 11) v = v.slice(0, 11);
+  // Remove tudo que não for número
+  let numbers = oldValue.replace(/\D/g, "");
 
-  let formattedValue;
-  if (v.length > 6) {
-    formattedValue = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-  } else if (v.length > 2) {
-    formattedValue = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-  } else if (v.length > 0) {
-    formattedValue = `(${v}`;
-  } else {
-    formattedValue = "";
+  if (numbers.length > 11) numbers = numbers.slice(0, 11);
+
+  let formattedValue = "";
+
+  if (numbers.length > 6) {
+    formattedValue = `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7)}`;
+  } else if (numbers.length > 2) {
+    formattedValue = `(${numbers.slice(0, 2)}) ${numbers.slice(2)}`;
+  } else if (numbers.length > 0) {
+    formattedValue = `(${numbers}`;
   }
 
-  input.value = formattedValue;
+  this.value = formattedValue;
 
-  // Ajusta a posição do cursor para não atrapalhar digitação
-  if (position < input.value.length) {
-    input.setSelectionRange(position, position);
+  // Ajusta a posição do cursor para que ele não pule
+  if (cursorPosition < this.value.length) {
+    this.setSelectionRange(cursorPosition, cursorPosition);
+  } else {
+    this.setSelectionRange(this.value.length, this.value.length);
   }
 });
-
 
   
 
