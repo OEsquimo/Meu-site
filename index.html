@@ -7,47 +7,49 @@
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
+  <div class="container">
 
-  <section class="topo">
-    <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico mexendo na evaporadora" />
-  </section>
-
-  <section class="servicos-imagens container">
-    <h2 class="titulo-servicos">Escolha um dos serviços e faça seu orçamento</h2>
-
-    <div class="servico" data-servico="Instalação" tabindex="0">
-      <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
-      <p>Instalação</p>
+    <!-- Imagem topo -->
+    <div class="topo-imagem">
+      <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico trabalhando" />
     </div>
 
-    <div class="servico" data-servico="Limpeza Split" tabindex="0">
-      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza Split" />
-      <p>Limpeza Split</p>
+    <!-- Texto topo do formulário -->
+    <div class="intro-text">
+      Preencha o formulário com seus dados
     </div>
 
-    <div class="servico" data-servico="Manutenção" tabindex="0">
-      <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
-      <p>Manutenção</p>
+    <!-- Selecione o serviço -->
+    <div class="servicos-imagens">
+      <div class="servico" data-servico="Instalação">
+        <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
+        <p>Instalação</p>
+      </div>
+      <div class="servico" data-servico="Limpeza Split">
+        <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza Split" />
+        <p>Limpeza Split</p>
+      </div>
+      <div class="servico" data-servico="Manutenção">
+        <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
+        <p>Manutenção</p>
+      </div>
     </div>
-  </section>
 
-  <section class="container">
+    <!-- Formulário -->
     <form id="formulario" novalidate>
-      <input type="hidden" id="servico" name="servico" value="" />
+      <input type="hidden" id="servicoSelecionado" name="servicoSelecionado" />
 
       <label for="nome">Nome:</label>
-      <input type="text" id="nome" />
-      <div class="error-message" id="erro-nome"></div>
-
+      <input type="text" id="nome" placeholder="Nome" />
+      
       <label for="endereco">Endereço:</label>
-      <input type="text" id="endereco" />
-      <div class="error-message" id="erro-endereco"></div>
-
+      <input type="text" id="endereco" placeholder="Endereço" />
+      
       <label for="whatsapp">WhatsApp:</label>
       <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" />
-      <div class="error-message" id="erro-whatsapp"></div>
-
-      <div id="campo-btus">
+      
+      <!-- Campo BTU aparece só para Instalação e Limpeza -->
+      <div id="campo-btus-wrapper">
         <label for="btus">Capacidade em BTUs:</label>
         <select id="btus">
           <option value="">Selecione</option>
@@ -57,20 +59,19 @@
           <option value="24000">24.000</option>
           <option value="30000">30.000</option>
         </select>
-        <div class="error-message" id="erro-btus"></div>
       </div>
 
-      <div id="campo-defeito" style="display:none;">
-        <label for="defeito">Descreva o defeito do ar-condicionado:</label>
-        <textarea id="defeito" rows="4" placeholder="Descreva o defeito"></textarea>
-        <div class="error-message" id="erro-defeito"></div>
+      <!-- Campo defeito só aparece para Manutenção -->
+      <div id="campo-defeito-wrapper" style="display:none;">
+        <label for="defeito">Descreva o defeito do ar condicionado:</label>
+        <textarea id="defeito" placeholder="Descreva o defeito aqui..."></textarea>
       </div>
 
       <div id="relatorio" style="margin-top: 20px; white-space: pre-line; background: #e6f2ff; padding: 10px; border-left: 5px solid #0055aa;"></div>
 
       <button type="button" id="enviarBtn" disabled>ENVIAR ORÇAMENTO</button>
     </form>
-  </section>
+  </div>
 
   <script src="assets/script.js"></script>
 </body>
