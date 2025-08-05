@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const seuWhatsApp = "5581983259341";
 
   // Máscara WhatsApp
-  whatsappInput.addEventListener("input", function (e) {
+/*  whatsappInput.addEventListener("input", function (e) {
     let v = e.target.value.replace(/\D/g, "");
     if (v.length > 11) v = v.slice(0, 11);
     if (v.length > 6) {
@@ -28,7 +28,37 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (v.length > 0) {
       e.target.value = `(${v}`;
     }
-  });
+  });*/
+
+
+whatsappInput.addEventListener("input", function (e) {
+  let input = e.target;
+  let position = input.selectionStart; // salva posição do cursor
+
+  let v = input.value.replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
+
+  let formattedValue;
+  if (v.length > 6) {
+    formattedValue = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+  } else if (v.length > 2) {
+    formattedValue = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+  } else if (v.length > 0) {
+    formattedValue = `(${v}`;
+  } else {
+    formattedValue = "";
+  }
+
+  input.value = formattedValue;
+
+  // Ajusta a posição do cursor para não atrapalhar digitação
+  if (position < input.value.length) {
+    input.setSelectionRange(position, position);
+  }
+});
+
+
+  
 
   // Seleção do serviço clicando na imagem
   servicos.forEach(servico => {
