@@ -2,43 +2,37 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Orçamento O Esquimó</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orçamento - O Esquimó</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
 
-  <!-- Topo com imagem -->
   <header class="topo-site">
     <div class="overlay">
-      <h1>O Esquimó</h1>
-      <p>Instalação e Limpeza de Ar-condicionado com Garantia e Qualidade</p>
+      <h1>Serviço com qualidade e garantia que você precisa!</h1>
     </div>
   </header>
 
-  <!-- Bloco com título e imagens -->
-  <div class="container">
+  <section class="servicos-imagens container">
     <h2>Escolha o serviço e gere seu orçamento</h2>
 
-    <section class="servicos-imagens">
-      <div class="servico" data-servico="Instalação">
-        <img src="assets/imagens/instalacao-ar.jpg" alt="Instalação" />
-        <p>Instalação</p>
-      </div>
+    <div class="servico" data-servico="Instalação">
+      <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
+      <p>Instalação</p>
+    </div>
 
-      <div class="servico" data-servico="Limpeza Split">
-        <img src="assets/imagens/limpeza-split.jpg" alt="Limpeza Split" />
-        <p>Limpeza Split</p>
-      </div>
+    <div class="servico" data-servico="Limpeza Split">
+      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza" />
+      <p>Limpeza Split</p>
+    </div>
 
-      <div class="servico" data-servico="Manutenção">
-        <img src="assets/imagens/manutencao-ar.jpg" alt="Manutenção" />
-        <p>Manutenção</p>
-      </div>
-    </section>
-  </div>
+    <div class="servico" data-servico="Manutenção">
+      <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
+      <p>Manutenção</p>
+    </div>
+  </section>
 
-  <!-- Formulário -->
   <div class="container">
     <form id="formulario">
       <label for="nome">Nome:</label>
@@ -63,29 +57,30 @@
       </select>
       <div class="error-message" id="erro-servico"></div>
 
-      <label for="btus">Capacidade em BTUs:</label>
-      <select id="btus" required>
-        <option value="">Selecione</option>
-        <option value="9000">9.000</option>
-        <option value="12000">12.000</option>
-        <option value="18000">18.000</option>
-        <option value="24000">24.000</option>
-        <option value="30000">30.000</option>
-      </select>
-      <div class="error-message" id="erro-btus"></div>
-
-      <!-- Campo defeito (aparece só em Manutenção) -->
-      <div id="campo-defeito" style="display: none;">
-        <label for="defeito">Descreva o defeito do ar-condicionado:</label>
-        <textarea id="defeito" rows="4" placeholder="Ex: O ar-condicionado não liga ou está com ruído..."></textarea>
+      <div id="campo-btus" style="display: none;">
+        <label for="btus">Capacidade em BTUs:</label>
+        <select id="btus">
+          <option value="">Selecione</option>
+          <option value="9000">9.000</option>
+          <option value="12000">12.000</option>
+          <option value="18000">18.000</option>
+          <option value="24000">24.000</option>
+          <option value="30000">30.000</option>
+        </select>
+        <div class="error-message" id="erro-btus"></div>
       </div>
 
-      <div id="relatorio" style="margin-top: 20px; white-space: pre-line; background: #e6f2ff; padding: 10px; border-left: 5px solid #0055aa;"></div>
+      <div id="campo-defeito" style="display: none;">
+        <label for="defeito">Descreva o defeito do ar-condicionado:</label>
+        <textarea id="defeito" rows="4"></textarea>
+      </div>
+
+      <div id="relatorio" class="relatorio"></div>
 
       <button type="button" id="enviarBtn" disabled>ENVIAR ORÇAMENTO</button>
     </form>
   </div>
 
-  <script src="assets/script.js"></script>
+  <script src="assets/script.js" defer></script>
 </body>
 </html>
