@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+7document.addEventListener("DOMContentLoaded", function () {
   const servicos = document.querySelectorAll(".servico");
   const servicoSelecionadoInput = document.getElementById("servicoSelecionado");
 
@@ -18,10 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const seuWhatsApp = "5581983259341";
 
   // Máscara WhatsApp
-    function validarWhatsApp(tel) {
-  const regex = /^\(?\d{2}\)? ?\d{4,5}-?\d{4}$/;
-  return regex.test(tel);
-}
+    
 
   // Seleção do serviço clicando na imagem
   servicos.forEach(servico => {
