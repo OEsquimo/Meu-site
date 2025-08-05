@@ -71,11 +71,17 @@ document.addEventListener("DOMContentLoaded", function () {
 }
 
   // Mostrar erro (placeholder + borda vermelha)
-  function mostrarErroInput(input, mensagem) {
-    input.classList.add("input-error");
-    input.value = "";
+function mostrarErroInput(input, mensagem) {
+  input.classList.add("input-error");
+  
+  // Só muda o placeholder se ainda não tiver valor válido
+  if (!validarWhatsApp(input.value.trim())) {
     input.placeholder = mensagem;
   }
+}
+
+
+  
 
   // Limpar erro
   function limparErroInput(input, placeholder) {
