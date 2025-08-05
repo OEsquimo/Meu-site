@@ -1,3 +1,9 @@
+/* Reset básico */
+* {
+  box-sizing: border-box;
+}
+
+/* Body e container */
 body {
   font-family: sans-serif;
   background: #f5f5f5;
@@ -14,67 +20,66 @@ body {
   box-shadow: 0 0 10px #ccc;
 }
 
-/* topo da imagem */
-.topo-imagem img {
+/* Topo */
+.topo img {
   width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 20px;
   border-radius: 10px;
-  margin-bottom: 15px;
 }
 
-.intro-text {
-  background-color: white;
-  padding: 10px 0;
-  margin-bottom: 15px;
+/* Título da seção de serviços */
+.servicos h2 {
   text-align: center;
-  font-weight: bold;
-  color: #003366;
-  border-radius: 5px;
-  font-size: 1.1em;
+  margin-bottom: 15px;
+  font-weight: 600;
+  color: #003366; /* Azul escuro */
 }
 
-/* Container das imagens */
+/* Imagens lado a lado da seleção */
 .servicos-imagens {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  margin-bottom: 20px;
 }
 
-/* Cada serviço */
 .servico {
-  flex: 0 0 30%;
-  max-width: 120px;
+  flex: 1;
   cursor: pointer;
+  background: white;
+  border-radius: 10px;
   text-align: center;
-  user-select: none;
+  padding: 10px 5px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 0 5px #ccc;
 }
 
 .servico img {
   width: 100%;
-  height: auto;
+  height: 90px;
+  object-fit: cover;
   border-radius: 10px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: block;
-  margin: 0 auto;
+  user-select: none;
+  pointer-events: none; /* Para garantir que o clique seja no div */
 }
 
 .servico p {
   margin-top: 8px;
   font-weight: 600;
   color: #003366;
-  font-size: 0.9em;
+  user-select: none;
 }
 
-.servico:hover, .servico.selecionado {
-  transform: scale(1.1);
-  box-shadow: 0 0 10px #0055aa;
-  z-index: 1;
+/* Efeito quando clicado */
+.servico.selecionado,
+.servico:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 85, 170, 0.6);
+  border: 2px solid #0055aa;
 }
 
-/* Estilos do formulário */
-
+/* Formulário */
 label {
   display: block;
   margin-top: 10px;
@@ -82,47 +87,80 @@ label {
   color: #003366;
 }
 
-input, select, textarea, button {
+input[type="text"],
+select,
+textarea {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  border: 1px solid #ccc;
+  font-size: 18px;
   border-radius: 8px;
-  box-sizing: border-box;
-  font-size: 16px;
+  border: 1px solid #ccc;
   font-family: sans-serif;
   transition: border-color 0.3s ease;
-  color: #333;
+  resize: vertical;
 }
 
 textarea {
-  resize: vertical;
-  min-height: 60px;
+  min-height: 70px;
 }
 
+/* Estilo do botão */
 button {
-  background-color: #2196F3;
+  background-color: #003366;
   color: white;
   border: none;
   margin-top: 20px;
+  padding: 12px;
+  font-size: 18px;
   cursor: not-allowed;
   opacity: 0.6;
-  transition: opacity 0.3s ease;
-  font-size: 18px;
+  border-radius: 8px;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 button:enabled {
   cursor: pointer;
   opacity: 1;
+  background-color: #0055aa;
 }
 
-/* Erro: borda vermelha e placeholder vermelho */
+/* Mensagem de erro dentro do input (borda vermelha + placeholder vermelho) */
 .input-error {
-  border: 2px solid red !important;
-  box-shadow: 0 0 5px red;
+  border-color: #e74c3c !important;
+  color: #e74c3c !important;
 }
 
 .input-error::placeholder {
-  color: red;
-  font-weight: bold;
+  color: #e74c3c !important;
+}
+
+/* Remover espaço extra no select quando está com erro */
+select.input-error {
+  color: #e74c3c !important;
+}
+
+/* Relatório estilo */
+#relatorio {
+  font-family: monospace;
+  font-size: 16px;
+  white-space: pre-line;
+  background: #e6f2ff;
+  padding: 10px;
+  border-left: 5px solid #0055aa;
+  border-radius: 5px;
+  color: #003366;
+}
+
+/* Responsivo - garante as imagens lado a lado no celular e menor */
+@media (max-width: 400px) {
+  .servicos-imagens {
+    gap: 5px;
+  }
+  .servico {
+    height: 110px;
+  }
+  .servico img {
+    height: 70px;
+  }
 }
