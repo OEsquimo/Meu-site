@@ -142,7 +142,7 @@ whatsappInput.addEventListener("input", function (e) {
 
     // WhatsApp
     if (!validarWhatsApp(whatsappInput.value.trim())) {
-      mostrarErroInput(whatsappInput, "DDD e número válidos");
+      mostrarErroInput(whatsappInput, "");
       isValid = false;
     } else {
       limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
