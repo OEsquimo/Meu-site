@@ -30,19 +30,26 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });*/
 
-// Permite digitar livremente no WhatsApp sem máscara automática
 whatsappInput.addEventListener("input", function (e) {
-  // Apenas limita a 15 caracteres
-  if (this.value.length > 15) {
-    this.value = this.value.slice(0, 15);
-  }
-});
+  const erroMsg = document.getElementById("erro-whatsapp");
 
-// Ao sair do campo, formata (opcional)
-whatsappInput.addEventListener("blur", function (e) {
   let v = this.value.replace(/\D/g, "");
-  if (v.length === 11) {
+  if (v.length > 11) v = v.slice(0, 11);
+
+  if (v.length > 6) {
     this.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+  } else if (v.length > 2) {
+    this.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+  } else if (v.length > 0) {
+    this.value = `(${v}`;
+  } else {
+    this.value = "";
+  }
+
+  // Se já tem conteúdo, remove mensagem de erro
+  if (this.value.trim() !== "") {
+    erroMsg.textContent = "";
+    this.classList.remove("input-error");
   }
 });
 
