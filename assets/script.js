@@ -70,7 +70,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   servicoSelect.addEventListener("change", function () {
-    if (servicoSelect.value === "Manutenção") {
+    const servicoSelecionado = servicoSelect.value;
+
+    if (servicoSelecionado === "Manutenção") {
       campoDefeito.style.display = "block";
       btusSelect.parentElement.style.display = "none";
       btusSelect.value = "";
