@@ -1,20 +1,23 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const servicos = document.querySelectorAll(".servico");
+  const servicoSelecionadoInput = document.getElementById("servicoSelecionado");
+
   const form = document.getElementById("formulario");
   const enviarBtn = document.getElementById("enviarBtn");
   const relatorioDiv = document.getElementById("relatorio");
+
   const nomeInput = document.getElementById("nome");
   const enderecoInput = document.getElementById("endereco");
   const whatsappInput = document.getElementById("whatsapp");
-  const servicoHidden = document.getElementById("servico");
-  const servicosImgs = document.querySelectorAll(".servico");
   const btusSelect = document.getElementById("btus");
   const defeitoTextarea = document.getElementById("defeito");
-  const campoBtus = document.getElementById("campo-btus");
-  const campoDefeito = document.getElementById("campo-defeito");
 
-  const seuWhatsApp = "5581983259341";
+  const campoBtusWrapper = document.getElementById("campo-btus-wrapper");
+  const campoDefeitoWrapper = document.getElementById("campo-defeito-wrapper");
 
-  // Máscara WhatsApp
+  const seuWhatsApp = "5581983259341"; // Seu WhatsApp fixo
+
+  // Função para aplicar máscara simples no WhatsApp
   whatsappInput.addEventListener("input", function (e) {
     let v = e.target.value.replace(/\D/g, "");
     if (v.length > 11) v = v.slice(0, 11);
@@ -27,85 +30,64 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  // Seleção do serviço clicando na imagem
+  servicos.forEach(servico => {
+    servico.addEventListener("click", function () {
+      servicos.forEach(s => s.classList.remove("selecionado"));
+      this.classList.add("selecionado");
+
+      const servicoEscolhido = this.getAttribute("data-servico");
+      servicoSelecionadoInput.value = servicoEscolhido;
+
+      atualizarCamposPorServico(servicoEscolhido);
+
+      // Rola para o campo nome e dá foco
+      nomeInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      nomeInput.focus();
+
+      validarFormulario(); // Atualiza botão e erros
+    });
+  });
+
+  // Mostrar/ocultar campos BTU e defeito
+  function atualizarCamposPorServico(servico) {
+    if (servico === "Instalação" || servico === "Limpeza Split") {
+      campoBtusWrapper.style.display = "block";
+      campoDefeitoWrapper.style.display = "none";
+    } else if (servico === "Manutenção") {
+      campoBtusWrapper.style.display = "none";
+      campoDefeitoWrapper.style.display = "block";
+    } else {
+      campoBtusWrapper.style.display = "none";
+      campoDefeitoWrapper.style.display = "none";
+    }
+  }
+
   // Validação WhatsApp
   function validarWhatsApp(tel) {
     const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
     return regex.test(tel);
   }
 
-  // Marcar e desmarcar erro no campo (borda e sombra vermelha)
-  function exibirErroCampo(input) {
+  // Função para mostrar erro (borda vermelha + placeholder vermelho)
+  function mostrarErroInput(input, mensagemErro, placeholderOriginal) {
     input.classList.add("input-error");
+    input.value = "";
+    input.placeholder = mensagemErro;
   }
 
-  function limparErroCampo(input) {
+  // Limpar erro do input
+  function limparErroInput(input, placeholderOriginal) {
     input.classList.remove("input-error");
+    input.placeholder = placeholderOriginal;
   }
 
-  // Limpa erros de todos os campos
-  function limparTodosErros() {
-    [nomeInput, enderecoInput, whatsappInput, btusSelect, defeitoTextarea].forEach(limparErroCampo);
-  }
-
-  // Atualiza visibilidade de campos BTUs e defeito conforme serviço
-  function atualizarCamposPorServico() {
-    const servico = servicoHidden.value;
-
-    if (servico === "Instalação" || servico === "Limpeza Split") {
-      campoBtus.style.display = "block";
-      campoDefeito.style.display = "none";
-      defeitoTextarea.value = "";
-    } else if (servico === "Manutenção") {
-      campoBtus.style.display = "none";
-      btusSelect.value = "";
-      campoDefeito.style.display = "block";
-    } else {
-      campoBtus.style.display = "none";
-      campoDefeito.style.display = "none";
-      btusSelect.value = "";
-      defeitoTextarea.value = "";
-    }
-  }
-
-  // Selecionar serviço com clique nas imagens
-  servicosImgs.forEach((div) => {
-    div.addEventListener("click", () => {
-      servicosImgs.forEach(d => d.classList.remove("selecionado"));
-      div.classList.add("selecionado");
-      servicoHidden.value = div.getAttribute("data-servico");
-      atualizarCamposPorServico();
-      nomeInput.focus();
-      window.scrollTo({ top: nomeInput.offsetTop - 30, behavior: "smooth" });
-      gerarRelatorio();
-    });
-    // Permite selecionar com Enter para acessibilidade
-    div.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        div.click();
-      }
-    });
-  });
-
-  // Função para calcular preço (mesmo do seu script original)
-  const precoInstalacao = {
-    "9000": 500,
-    "12000": 600,
-    "18000": 700,
-    "24000": 800,
-    "30000": 900,
-  };
-
-  const precoLimpezaSplit = {
-    "9000": 180,
-    "12000": 230,
-    "18000": 280,
-    "24000": 330,
-    "30000": 380,
-  };
-
+  // Preços base
+  const precoInstalacao = { "9000": 500, "12000": 600, "18000": 700, "24000": 800, "30000": 900 };
+  const precoLimpezaSplit = { "9000": 180, "12000": 230, "18000": 280, "24000": 330, "30000": 380 };
   const precoLimpezaJanela = 150;
 
+  // Calcula valor orçamento
   function calcularValor(servico, btus) {
     if (servico === "Instalação") return precoInstalacao[btus] ?? "";
     if (servico === "Limpeza Split") return precoLimpezaSplit[btus] ?? "";
@@ -113,102 +95,123 @@ document.addEventListener("DOMContentLoaded", function () {
     return "";
   }
 
-  // Validação completa dos campos com exibição de erro dentro do input
+  // Validação completa do formulário
   function validarFormulario() {
     let valido = true;
 
-    limparTodosErros();
-
+    // Nome
     if (nomeInput.value.trim() === "") {
-      exibirErroCampo(nomeInput);
+      mostrarErroInput(nomeInput, "Preencha seu nome");
       valido = false;
+    } else {
+      limparErroInput(nomeInput, "Nome");
     }
+
+    // Endereço
     if (enderecoInput.value.trim() === "") {
-      exibirErroCampo(enderecoInput);
+      mostrarErroInput(enderecoInput, "Preencha seu endereço");
       valido = false;
+    } else {
+      limparErroInput(enderecoInput, "Endereço");
     }
+
+    // WhatsApp
     if (!validarWhatsApp(whatsappInput.value.trim())) {
-      exibirErroCampo(whatsappInput);
+      mostrarErroInput(whatsappInput, "DDD e número válidos");
+      valido = false;
+    } else {
+      limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
+    }
+
+    // Serviço selecionado
+    if (servicoSelecionadoInput.value === "") {
+      alert("Selecione um serviço clicando na imagem acima.");
       valido = false;
     }
 
-    const servico = servicoHidden.value;
-
-    if (servico === "") {
-      // Se não selecionou serviço, nenhuma validação a mais, pois campo invisível
+    // BTUs se for instalação ou limpeza split
+    if ((servicoSelecionadoInput.value === "Instalação" || servicoSelecionadoInput.value === "Limpeza Split") && btusSelect.value === "") {
+      mostrarErroInput(btusSelect, "Selecione a capacidade");
       valido = false;
-    } else if (servico === "Instalação" || servico === "Limpeza Split") {
-      if (btusSelect.value === "") {
-        exibirErroCampo(btusSelect);
-        valido = false;
-      }
-    } else if (servico === "Manutenção") {
-      if (defeitoTextarea.value.trim() === "") {
-        exibirErroCampo(defeitoTextarea);
-        valido = false;
-      }
+    } else {
+      limparErroInput(btusSelect, "");
     }
+
+    // Defeito se for manutenção
+    if (servicoSelecionadoInput.value === "Manutenção" && defeitoTextarea.value.trim() === "") {
+      mostrarErroInput(defeitoTextarea, "Descreva o defeito");
+      valido = false;
+    } else {
+      limparErroInput(defeitoTextarea, "Descreva o defeito aqui...");
+    }
+
+    enviarBtn.disabled = !valido;
 
     return valido;
   }
 
-  // Gera o relatório de orçamento no div e habilita botão se válido
+  // Função para gerar relatório
   function gerarRelatorio() {
-    if (!validarFormulario()) {
-      relatorioDiv.innerText = "";
-      enviarBtn.disabled = true;
-      return;
-    }
-
     const nome = nomeInput.value.trim();
     const endereco = enderecoInput.value.trim();
-    const whatsapp = whatsappInput.value.trim();
-    const servico = servicoHidden.value;
-    const btus = btusSelect.value;
+    const whatsappCliente = whatsappInput.value.trim();
+    const servico = servicoSelecionadoInput.value;
+    const btus = btusSelect.value.trim();
     const defeito = defeitoTextarea.value.trim();
 
-    let valor = calcularValor(servico, btus);
-    if (servico === "Manutenção") valor = "Orçamento sob análise";
+    let valorOrcamento = calcularValor(servico, btus);
+    if (servico === "Manutenção") {
+      valorOrcamento = "Orçamento sob análise";
+    }
 
-    const textoRelatorio = `*ORÇAMENTO*
-👤 Nome: ${nome}
-📍 Endereço: ${endereco}
-📱 WhatsApp: ${whatsapp}
-🛠️ Serviço: ${servico}
-${servico === "Manutenção" ? `🔧 Defeito: ${defeito}` : `❄️ BTUs: ${btus || "N/A"}`}
-💰 Valor do Orçamento: R$ ${valor}
-Obs: Mande esse orçamento para nossa conversa no WhatsApp`;
+    // Formata relatório com emojis e mini ícones
+    let relatorioTexto =
+`*ORÇAMENTO - O ESQUIMÓ*  
+👤 Nome: ${nome}  
+📍 Endereço: ${endereco}  
+📱 WhatsApp: ${whatsappCliente}  
+🛠️ Serviço: ${servico}  
+❄️ BTUs: ${btus || "N/A"}`;
 
-    relatorioDiv.innerText = textoRelatorio;
-    enviarBtn.disabled = false;
+    if (servico === "Manutenção") {
+      relatorioTexto += `  
+⚠️ Defeito descrito: ${defeito}`;
+    }
+
+    relatorioTexto += `  
+💰 Valor: R$ ${valorOrcamento}  
+
+📩 Envie este orçamento para nosso WhatsApp.`;
+
+    relatorioDiv.innerText = relatorioTexto;
   }
 
-  // Atualiza relatório e validação quando campos mudam
-  form.addEventListener("input", () => {
-    limparTodosErros();
+  // Atualiza relatório e valida formulário ao digitar
+  form.addEventListener("input", function () {
+    validarFormulario();
     gerarRelatorio();
   });
 
-  // Botão enviar orçamento
-  enviarBtn.addEventListener("click", () => {
+  // Enviar botão click
+  enviarBtn.addEventListener("click", function () {
     if (!validarFormulario()) {
-      gerarRelatorio();
-      // foco no primeiro campo com erro:
+      // Foca no primeiro campo inválido
       if (nomeInput.classList.contains("input-error")) nomeInput.focus();
       else if (enderecoInput.classList.contains("input-error")) enderecoInput.focus();
       else if (whatsappInput.classList.contains("input-error")) whatsappInput.focus();
       else if (btusSelect.classList.contains("input-error")) btusSelect.focus();
       else if (defeitoTextarea.classList.contains("input-error")) defeitoTextarea.focus();
+      else if (servicoSelecionadoInput.value === "") alert("Selecione um serviço clicando na imagem acima.");
       return;
     }
 
-    const msg = relatorioDiv.innerText;
-    const url = `https://wa.me/${seuWhatsApp}?text=${encodeURIComponent(msg)}`;
-    window.open(url, "_blank");
+    const mensagem = relatorioDiv.innerText;
+    if (mensagem) {
+      const url = `https://wa.me/${seuWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, "_blank");
+    }
   });
 
-  // Inicializa campos (esconde btus e defeito)
-  servicoHidden.value = "";
-  atualizarCamposPorServico();
+  // Inicialmente botão desabilitado
   enviarBtn.disabled = true;
 });
