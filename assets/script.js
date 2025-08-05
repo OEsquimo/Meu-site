@@ -65,9 +65,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Validação WhatsApp
   function validarWhatsApp(tel) {
-    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
-    return regex.test(tel);
-  }
+  const somenteNumeros = tel.replace(/\D/g, "");
+  return somenteNumeros.length === 11;
+}
 
   // Mostrar erro (placeholder + borda vermelha)
   function mostrarErroInput(input, mensagem) {
