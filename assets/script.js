@@ -17,54 +17,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const seuWhatsApp = "5581983259341";
 
-  // --------------------------------------------
-  // Campo WhatsApp com máscara, validação e erro
-  // --------------------------------------------
+  // Máscara WhatsApp
   whatsappInput.addEventListener("input", function (e) {
-    // Remove tudo que não for número para trabalhar só com dígitos
-    let digits = this.value.replace(/\D/g, "");
-
-    // Limita o máximo a 11 dígitos (DDD + número)
-    if (digits.length > 11) {
-      digits = digits.slice(0, 11);
+    let v = e.target.value.replace(/\D/g, "");
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) {
+      e.target.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+    } else if (v.length > 2) {
+      e.target.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+    } else if (v.length > 0) {
+      e.target.value = `(${v}`;
     }
-
-    // Monta a máscara conforme quantidade de dígitos
-    if (digits.length > 6) {
-      // Exemplo: (81) 98325-9341
-      this.value = `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
-    } else if (digits.length > 2) {
-      // Exemplo: (81) 98325
-      this.value = `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-    } else if (digits.length > 0) {
-      // Exemplo: (8
-      this.value = `(${digits}`;
-    } else {
-      // Campo vazio
-      this.value = "";
-    }
-
-    // ✅ Remove erro visual assim que o usuário começa a digitar algo válido
-    if (validarWhatsApp(this.value)) {
-      this.classList.remove("input-error");
-      document.getElementById("erro-whatsapp").textContent = "";
-    } else {
-      // ⚠️ Mostra erro se o número não estiver no formato correto
-      this.classList.add("input-error");
-      document.getElementById("erro-whatsapp").textContent =
-        "DDD e número válidos (ex: (81) 91234-5678)";
-    }
-
-    // Atualiza o estado do botão Enviar conforme validação geral
-    validarFormulario();
   });
 
-  // --------------------------------------------
   // Seleção do serviço clicando na imagem
-  // --------------------------------------------
-  servicos.forEach((servico) => {
+  servicos.forEach(servico => {
     servico.addEventListener("click", function () {
-      servicos.forEach((s) => s.classList.remove("selecionado"));
+      servicos.forEach(s => s.classList.remove("selecionado"));
       this.classList.add("selecionado");
 
       const servicoEscolhido = this.getAttribute("data-servico");
@@ -80,9 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // --------------------------------------------
   // Mostrar ou esconder campos conforme serviço escolhido
-  // --------------------------------------------
   function atualizarCamposPorServico(servico) {
     if (servico === "Instalação" || servico === "Limpeza Split") {
       campoBtusWrapper.style.display = "block";
@@ -96,60 +63,39 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // --------------------------------------------
-  // Validação WhatsApp - regex para formato (xx) xxxxx-xxxx
-  // --------------------------------------------
+  // Validação WhatsApp
   function validarWhatsApp(tel) {
-    const regex = /^\d{2} \d{5}-\d{4}$/;
+    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
     return regex.test(tel);
   }
 
-  // --------------------------------------------
   // Mostrar erro (placeholder + borda vermelha)
-  // --------------------------------------------
   function mostrarErroInput(input, mensagem) {
     input.classList.add("input-error");
     input.value = "";
     input.placeholder = mensagem;
   }
 
-  // --------------------------------------------
-  // Limpar erro e restaurar placeholder original
-  // --------------------------------------------
+  // Limpar erro
   function limparErroInput(input, placeholder) {
     input.classList.remove("input-error");
     input.placeholder = placeholder;
   }
 
-  // --------------------------------------------
-  // Preço base dos serviços
-  // --------------------------------------------
-  const precoInstalacao = {
-    9000: 500,
-    12000: 600,
-    18000: 700,
-    24000: 800,
-    30000: 900,
-  };
-  const precoLimpezaSplit = {
-    9000: 180,
-    12000: 230,
-    18000: 280,
-    24000: 330,
-    30000: 380,
-  };
+  // Preço base
+  const precoInstalacao = { "9000": 500, "12000": 600, "18000": 700, "24000": 800, "30000": 900 };
+  const precoLimpezaSplit = { "9000": 180, "12000": 230, "18000": 280, "24000": 330, "30000": 380 };
   const precoLimpezaJanela = 150;
 
   function calcularValor(servico, btus) {
     if (servico === "Instalação") return precoInstalacao[btus] ?? "";
     if (servico === "Limpeza Split") return precoLimpezaSplit[btus] ?? "";
     if (servico === "Limpeza Janela") return precoLimpezaJanela;
+    // Para manutenção não tem valor fixo
     return "";
   }
 
-  // --------------------------------------------
   // Validação geral do formulário
-  // --------------------------------------------
   function validarFormulario() {
     let isValid = true;
 
@@ -171,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // WhatsApp
     if (!validarWhatsApp(whatsappInput.value.trim())) {
-      mostrarErroInput(whatsappInput, "(xx) xxxxx-xxxx");
+      mostrarErroInput(whatsappInput, "DDD e número válidos");
       isValid = false;
     } else {
       limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
@@ -184,16 +130,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // BTUs ou defeito conforme serviço
-    if (
-      servicoSelecionadoInput.value === "Instalação" ||
-      servicoSelecionadoInput.value === "Limpeza Split"
-    ) {
+    if (servicoSelecionadoInput.value === "Instalação" || servicoSelecionadoInput.value === "Limpeza Split") {
       if (btusSelect.value === "") {
         mostrarErroInput(btusSelect, "Selecione BTU");
         isValid = false;
       } else {
         limparErroInput(btusSelect, "");
       }
+      // defeito não é obrigatório aqui
       limparErroInput(defeitoTextarea, "Descreva o defeito aqui...");
     } else if (servicoSelecionadoInput.value === "Manutenção") {
       if (defeitoTextarea.value.trim() === "") {
@@ -202,6 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
       } else {
         limparErroInput(defeitoTextarea, "Descreva o defeito aqui...");
       }
+      // BTUs não obrigatório aqui
       limparErroInput(btusSelect, "");
     } else {
       limparErroInput(btusSelect, "");
@@ -212,9 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return isValid;
   }
 
-  // --------------------------------------------
   // Gera relatório e ativa botão
-  // --------------------------------------------
   function gerarRelatorio() {
     if (!validarFormulario()) {
       relatorioDiv.innerText = "";
@@ -255,16 +198,28 @@ Obs: Mande esse orçamento para nossa conversa no WhatsApp`;
     return textoRelatorio;
   }
 
-  // --------------------------------------------
   // Atualiza relatório e botão ao digitar
-  // --------------------------------------------
   form.addEventListener("input", () => {
     gerarRelatorio();
   });
 
-  // --------------------------------------------
   // Clique botão enviar
-  // --------------------------------------------
   enviarBtn.addEventListener("click", () => {
     if (!validarFormulario()) {
-      // Foca no primeiro campo com
+      // Foca no primeiro campo com erro
+      if (nomeInput.classList.contains("input-error")) nomeInput.focus();
+      else if (enderecoInput.classList.contains("input-error")) enderecoInput.focus();
+      else if (whatsappInput.classList.contains("input-error")) whatsappInput.focus();
+      else if (btusSelect.classList.contains("input-error")) btusSelect.focus();
+      else if (defeitoTextarea.classList.contains("input-error")) defeitoTextarea.focus();
+      return;
+    }
+
+    const mensagem = gerarRelatorio();
+    if (mensagem) {
+      const url = `https://wa.me/${seuWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+      window.open(url, "_blank");
+    }
+  });
+
+});
