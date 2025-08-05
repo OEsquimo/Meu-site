@@ -2,93 +2,78 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Orçamento - O Esquimó</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-
-  <header class="topo-site">
-    <div class="overlay">
-      <h1>Serviço com qualidade e garantia que você precisa!</h1>
-    </div>
+  <header class="topo">
+    <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico trabalhando" class="topo-img">
+    <h1 class="topo-titulo">Escolha o serviço e gere seu orçamento</h1>
   </header>
 
-  <section class="servicos-imagens container">
-    <h2>Escolha o serviço e gere seu orçamento</h2>
-
+  <section class="servicos container">
     <div class="servico" data-servico="Instalação">
       <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
       <p>Instalação</p>
     </div>
-
     <div class="servico" data-servico="Limpeza Split">
-      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza" />
+      <img src="assets/imagens/limpeza-split.jpg" alt="Limpeza de Ar-Condicionado Split" />
       <p>Limpeza Split</p>
     </div>
-
     <div class="servico" data-servico="Manutenção">
-      <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
+      <img src="assets/imagens/manutencao-ar.jpg" alt="Manutenção de Ar-Condicionado" />
       <p>Manutenção</p>
     </div>
   </section>
 
-  <div class="container">
-    <form id="formulario" novalidate>
-      <div class="campo">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" required />
-        <span class="error-message" id="erro-nome"></span>
+  <section class="container formulario-container">
+    <form id="formulario">
+      <input type="hidden" id="servico" />
+      
+      <label for="nome">Nome:</label>
+      <div class="input-erro">
+        <input type="text" id="nome" />
+        <span id="erro-nome" class="erro-msg"></span>
       </div>
 
-      <div class="campo">
-        <label for="endereco">Endereço:</label>
-        <input type="text" id="endereco" required />
-        <span class="error-message" id="erro-endereco"></span>
+      <label for="endereco">Endereço:</label>
+      <div class="input-erro">
+        <input type="text" id="endereco" />
+        <span id="erro-endereco" class="erro-msg"></span>
       </div>
 
-      <div class="campo">
-        <label for="whatsapp">WhatsApp:</label>
-        <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" required />
-        <span class="error-message" id="erro-whatsapp"></span>
+      <label for="whatsapp">WhatsApp:</label>
+      <div class="input-erro">
+        <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" />
+        <span id="erro-whatsapp" class="erro-msg"></span>
       </div>
 
-      <div class="campo">
-        <label for="servico">Tipo de Serviço:</label>
-        <select id="servico" required>
-          <option value="">Selecione</option>
-          <option value="Instalação">Instalação</option>
-          <option value="Limpeza Split">Limpeza Split</option>
-          <option value="Limpeza Janela">Limpeza Janela</option>
-          <option value="Manutenção">Manutenção</option>
-        </select>
-        <span class="error-message" id="erro-servico"></span>
-      </div>
-
-      <div class="campo" id="campo-btus" style="display: none;">
+      <div id="campo-btus">
         <label for="btus">Capacidade em BTUs:</label>
-        <select id="btus">
-          <option value="">Selecione</option>
-          <option value="9000">9.000</option>
-          <option value="12000">12.000</option>
-          <option value="18000">18.000</option>
-          <option value="24000">24.000</option>
-          <option value="30000">30.000</option>
-        </select>
-        <span class="error-message" id="erro-btus"></span>
+        <div class="input-erro">
+          <select id="btus">
+            <option value="">Selecione</option>
+            <option value="9000">9.000</option>
+            <option value="12000">12.000</option>
+            <option value="18000">18.000</option>
+            <option value="24000">24.000</option>
+            <option value="30000">30.000</option>
+          </select>
+          <span id="erro-btus" class="erro-msg"></span>
+        </div>
       </div>
 
-      <div class="campo" id="campo-defeito" style="display: none;">
+      <div id="campo-defeito" style="display:none">
         <label for="defeito">Descreva o defeito do ar-condicionado:</label>
-        <textarea id="defeito" rows="4"></textarea>
+        <textarea id="defeito" rows="3" placeholder="Ex: Ar não está gelando..."></textarea>
       </div>
 
-      <div id="relatorio" class="relatorio"></div>
-
+      <div id="relatorio" class="relatorio-box"></div>
       <button type="button" id="enviarBtn" disabled>ENVIAR ORÇAMENTO</button>
     </form>
-  </div>
+  </section>
 
-  <script src="assets/script.js" defer></script>
+  <script src="assets/script.js"></script>
 </body>
 </html>
