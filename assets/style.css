@@ -28,10 +28,11 @@ body {
   display: flex;
   gap: 10px;
   justify-content: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* força ficar em linha */
   max-width: 400px;
   margin: 20px auto;
   box-shadow: 0 0 10px #ccc;
+  overflow-x: auto; /* scroll horizontal se precisar */
 }
 
 .titulo-servicos {
@@ -46,11 +47,13 @@ body {
 .servico {
   cursor: pointer;
   text-align: center;
-  width: 110px; /* Mesma largura para alinhar */
+  width: 100px;
+  min-width: 100px;
   user-select: none;
   border-radius: 8px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   padding: 5px;
+  flex-shrink: 0;
 }
 
 .servico img {
@@ -107,20 +110,22 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 5px #0055aa;
 }
 
-/* Mensagens de erro dentro dos inputs */
-.error-message {
-  color: red;
-  font-size: 0.85em;
-  margin-top: 3px;
-  margin-bottom: 10px;
-  min-height: 18px;
-  padding-left: 5px;
-}
-
-/* Borda vermelha para input com erro */
-.input-error {
+/* mensagens de erro dentro do campo */
+input.input-error,
+select.input-error,
+textarea.input-error {
   border-color: red !important;
   box-shadow: 0 0 5px red !important;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="red" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm.5 6h-1v7h1V6zm0 9h-1v2h1v-2z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px 16px;
+  padding-right: 30px;
+}
+
+/* esconde as mensagens de erro que ficam em div abaixo dos campos */
+.error-message {
+  display: none !important;
 }
 
 /* Botão */
