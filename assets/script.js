@@ -17,45 +17,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const seuWhatsApp = "5581983259341";
 
-  // Máscara WhatsApp
-/*  whatsappInput.addEventListener("input", function (e) {
-    let v = e.target.value.replace(/\D/g, "");
+  // Atualização da máscara WhatsApp (opcional)
+  whatsappInput.addEventListener("input", function (e) {
+    const erroMsg = document.getElementById("erro-whatsapp");
+
+    let v = this.value.replace(/\D/g, "");
     if (v.length > 11) v = v.slice(0, 11);
+
     if (v.length > 6) {
-      e.target.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+      this.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
     } else if (v.length > 2) {
-      e.target.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+      this.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
     } else if (v.length > 0) {
-      e.target.value = `(${v}`;
+      this.value = `(${v}`;
+    } else {
+      this.value = "";
     }
-  });*/
 
-whatsappInput.addEventListener("input", function (e) {
-  const erroMsg = document.getElementById("erro-whatsapp");
+    if (this.value.trim() !== "") {
+      erroMsg.textContent = "";
+      this.classList.remove("input-error");
+    }
+  });
 
-  let v = this.value.replace(/\D/g, "");
-  if (v.length > 11) v = v.slice(0, 11);
-
-  if (v.length > 6) {
-    this.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-  } else if (v.length > 2) {
-    this.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-  } else if (v.length > 0) {
-    this.value = `(${v}`;
-  } else {
-    this.value = "";
-  }
-
-  // Se já tem conteúdo, remove mensagem de erro
-  if (this.value.trim() !== "") {
-    erroMsg.textContent = "";
-    this.classList.remove("input-error");
-  }
-});
-
-  
-
-  // Seleção do serviço clicando na imagem
+  // Seleção do serviço
   servicos.forEach(servico => {
     servico.addEventListener("click", function () {
       servicos.forEach(s => s.classList.remove("selecionado"));
@@ -66,7 +51,6 @@ whatsappInput.addEventListener("input", function (e) {
 
       atualizarCamposPorServico(servicoEscolhido);
 
-      // Scroll suave para campo nome + foco
       nomeInput.scrollIntoView({ behavior: "smooth", block: "center" });
       nomeInput.focus();
 
@@ -74,7 +58,6 @@ whatsappInput.addEventListener("input", function (e) {
     });
   });
 
-  // Mostrar ou esconder campos conforme serviço escolhido
   function atualizarCamposPorServico(servico) {
     if (servico === "Instalação" || servico === "Limpeza Split") {
       campoBtusWrapper.style.display = "block";
@@ -88,31 +71,23 @@ whatsappInput.addEventListener("input", function (e) {
     }
   }
 
-  // Validação WhatsApp
-
-function validarWhatsApp(tel) {
-  const numeros = tel.replace(/\D/g, "");
-  return numeros.length === 10 || numeros.length === 11;
-}
-
-
-
-  
-
-  // Mostrar erro (placeholder + borda vermelha)
-  function mostrarErroInput(input, mensagem) {
-    input.classList.add("input-error");
-    input.value = "";
-    input.placeholder = mensagem;
+  function validarWhatsApp(tel) {
+    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
+    return regex.test(tel);
   }
 
-  // Limpar erro
+  // ✅ Corrigido: não apaga mais o valor digitado no campo
+  function mostrarErroInput(input, mensagem) {
+    input.classList.add("input-error");
+    input.placeholder = mensagem;
+    // input.value = ""; // ❌ não vamos mais apagar o valor
+  }
+
   function limparErroInput(input, placeholder) {
     input.classList.remove("input-error");
     input.placeholder = placeholder;
   }
 
-  // Preço base
   const precoInstalacao = { "9000": 500, "12000": 600, "18000": 700, "24000": 800, "30000": 900 };
   const precoLimpezaSplit = { "9000": 180, "12000": 230, "18000": 280, "24000": 330, "30000": 380 };
   const precoLimpezaJanela = 150;
@@ -121,23 +96,19 @@ function validarWhatsApp(tel) {
     if (servico === "Instalação") return precoInstalacao[btus] ?? "";
     if (servico === "Limpeza Split") return precoLimpezaSplit[btus] ?? "";
     if (servico === "Limpeza Janela") return precoLimpezaJanela;
-    // Para manutenção não tem valor fixo
     return "";
   }
 
-  // Validação geral do formulário
   function validarFormulario() {
     let isValid = true;
 
-    // Nome
     if (nomeInput.value.trim() === "") {
       mostrarErroInput(nomeInput, "Informe seu nome");
       isValid = false;
     } else {
-      limparErroInput(nomeInput, "");
+      limparErroInput(nomeInput, "Digite seu nome");
     }
 
-    // Endereço
     if (enderecoInput.value.trim() === "") {
       mostrarErroInput(enderecoInput, "Informe seu endereço");
       isValid = false;
@@ -145,21 +116,18 @@ function validarWhatsApp(tel) {
       limparErroInput(enderecoInput, "Digite seu endereço");
     }
 
-    // WhatsApp
     if (!validarWhatsApp(whatsappInput.value.trim())) {
-      mostrarErroInput(whatsappInput, "");
+      mostrarErroInput(whatsappInput, "DDD e número válidos");
       isValid = false;
     } else {
       limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
     }
 
-    // Serviço selecionado
     if (servicoSelecionadoInput.value === "") {
       alert("Por favor, selecione um serviço clicando na imagem.");
       isValid = false;
     }
 
-    // BTUs ou defeito conforme serviço
     if (servicoSelecionadoInput.value === "Instalação" || servicoSelecionadoInput.value === "Limpeza Split") {
       if (btusSelect.value === "") {
         mostrarErroInput(btusSelect, "Selecione BTU");
@@ -167,7 +135,6 @@ function validarWhatsApp(tel) {
       } else {
         limparErroInput(btusSelect, "");
       }
-      // defeito não é obrigatório aqui
       limparErroInput(defeitoTextarea, "Descreva o defeito aqui...");
     } else if (servicoSelecionadoInput.value === "Manutenção") {
       if (defeitoTextarea.value.trim() === "") {
@@ -176,7 +143,6 @@ function validarWhatsApp(tel) {
       } else {
         limparErroInput(defeitoTextarea, "Descreva o defeito aqui...");
       }
-      // BTUs não obrigatório aqui
       limparErroInput(btusSelect, "");
     } else {
       limparErroInput(btusSelect, "");
@@ -187,7 +153,6 @@ function validarWhatsApp(tel) {
     return isValid;
   }
 
-  // Gera relatório e ativa botão
   function gerarRelatorio() {
     if (!validarFormulario()) {
       relatorioDiv.innerText = "";
@@ -228,15 +193,12 @@ Obs: Mande esse orçamento para nossa conversa no WhatsApp`;
     return textoRelatorio;
   }
 
-  // Atualiza relatório e botão ao digitar
   form.addEventListener("input", () => {
     gerarRelatorio();
   });
 
-  // Clique botão enviar
   enviarBtn.addEventListener("click", () => {
     if (!validarFormulario()) {
-      // Foca no primeiro campo com erro
       if (nomeInput.classList.contains("input-error")) nomeInput.focus();
       else if (enderecoInput.classList.contains("input-error")) enderecoInput.focus();
       else if (whatsappInput.classList.contains("input-error")) whatsappInput.focus();
@@ -251,5 +213,4 @@ Obs: Mande esse orçamento para nossa conversa no WhatsApp`;
       window.open(url, "_blank");
     }
   });
-
 });
