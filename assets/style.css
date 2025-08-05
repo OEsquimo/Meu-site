@@ -42,8 +42,8 @@ body {
 }
 
 .servicos-imagens {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  display: flex;
+  justify-content: center;
   gap: 15px;
   margin: 20px auto;
   max-width: 800px;
@@ -58,15 +58,24 @@ body {
   box-shadow: 0 0 5px #aaa;
   cursor: pointer;
   transition: transform 0.2s;
+  flex: 1 1 150px;
+  max-width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.servico:hover {
-  transform: scale(1.03);
+.servico:hover,
+.servico:focus {
+  transform: scale(1.05);
+  outline: none;
+  box-shadow: 0 0 10px #0055aa;
 }
 
 .servico img {
   width: 100%;
-  height: auto;
+  height: 120px;
+  object-fit: cover;
   border-radius: 6px;
 }
 
@@ -74,6 +83,7 @@ body {
   margin: 8px 0 0;
   font-weight: bold;
   color: #003366;
+  user-select: none;
 }
 
 h2 {
@@ -138,8 +148,17 @@ button:enabled {
   font-weight: bold;
 }
 
-@media (max-width: 500px) {
-  .topo-site h1 {
-    font-size: 18px;
+@media (max-width: 600px) {
+  .servicos-imagens {
+    flex-direction: column;
+    max-width: 300px;
+    margin: 10px auto;
+  }
+  .servico {
+    max-width: 100%;
+    height: auto;
+  }
+  .servico img {
+    height: 150px;
   }
 }
