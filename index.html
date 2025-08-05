@@ -7,51 +7,49 @@
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-  <section class="topo container">
-    <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico mexendo no ar-condicionado" style="width:100%; max-height:250px; object-fit:cover; border-radius:10px;"/>
+
+  <section class="topo">
+    <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico mexendo na evaporadora" />
   </section>
 
   <section class="servicos-imagens container">
+    <h2 class="titulo-servicos">Escolha um dos serviços e faça seu orçamento</h2>
+
     <div class="servico" data-servico="Instalação" tabindex="0">
       <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
       <p>Instalação</p>
     </div>
+
     <div class="servico" data-servico="Limpeza Split" tabindex="0">
       <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza Split" />
       <p>Limpeza Split</p>
     </div>
+
     <div class="servico" data-servico="Manutenção" tabindex="0">
       <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
       <p>Manutenção</p>
     </div>
   </section>
 
-  <div class="container">
+  <section class="container">
     <form id="formulario" novalidate>
-      <!-- Campo serviço escondido para o JS -->
-      <input type="hidden" id="servico" name="servico" value=""/>
+      <input type="hidden" id="servico" name="servico" value="" />
 
-      <div class="input-container">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" required />
-        <div class="error-message" id="erro-nome"></div>
-      </div>
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" />
+      <div class="error-message" id="erro-nome"></div>
 
-      <div class="input-container">
-        <label for="endereco">Endereço:</label>
-        <input type="text" id="endereco" required />
-        <div class="error-message" id="erro-endereco"></div>
-      </div>
+      <label for="endereco">Endereço:</label>
+      <input type="text" id="endereco" />
+      <div class="error-message" id="erro-endereco"></div>
 
-      <div class="input-container">
-        <label for="whatsapp">WhatsApp:</label>
-        <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" required />
-        <div class="error-message" id="erro-whatsapp"></div>
-      </div>
+      <label for="whatsapp">WhatsApp:</label>
+      <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" />
+      <div class="error-message" id="erro-whatsapp"></div>
 
-      <div id="campo-btus" class="input-container" style="display:none;">
+      <div id="campo-btus">
         <label for="btus">Capacidade em BTUs:</label>
-        <select id="btus" name="btus">
+        <select id="btus">
           <option value="">Selecione</option>
           <option value="9000">9.000</option>
           <option value="12000">12.000</option>
@@ -62,17 +60,17 @@
         <div class="error-message" id="erro-btus"></div>
       </div>
 
-      <div id="campo-defeito" class="input-container" style="display:none;">
+      <div id="campo-defeito" style="display:none;">
         <label for="defeito">Descreva o defeito do ar-condicionado:</label>
-        <textarea id="defeito" rows="3" placeholder="Descreva o problema"></textarea>
+        <textarea id="defeito" rows="4" placeholder="Descreva o defeito"></textarea>
         <div class="error-message" id="erro-defeito"></div>
       </div>
 
-      <div id="relatorio"></div>
+      <div id="relatorio" style="margin-top: 20px; white-space: pre-line; background: #e6f2ff; padding: 10px; border-left: 5px solid #0055aa;"></div>
 
       <button type="button" id="enviarBtn" disabled>ENVIAR ORÇAMENTO</button>
     </form>
-  </div>
+  </section>
 
   <script src="assets/script.js"></script>
 </body>
