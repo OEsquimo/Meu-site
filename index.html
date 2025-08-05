@@ -3,42 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>O Esquimó - Ar-Condicionado</title>
+  <title>Orçamento O Esquimó</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
 
+  <!-- Topo com imagem -->
   <header class="topo-site">
     <div class="overlay">
       <h1>O Esquimó</h1>
-      <p>Instalação com preço justo, garantia e a qualidade que você merece.</p>
+      <p>Instalação e Limpeza de Ar-condicionado com Garantia e Qualidade</p>
     </div>
   </header>
 
-  
-  <section class="servicos-imagens container">
-
-    <section class="chamada-servico">
-    <h2>Escolha o serviço e gere seu orçamento</h2>
-  </section>
-
-    <div class="servico" data-servico="Instalação">
-      <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
-      <p>Instalação</p>
-    </div>
-    <div class="servico" data-servico="Limpeza Split">
-      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza Split" />
-      <p>Limpeza Split</p>
-    </div>
-    <div class="servico" data-servico="Manutenção">
-      <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
-      <p>Manutenção</p>
-    </div>
-  </section>
-
+  <!-- Bloco branco com título e imagens -->
   <div class="container">
-    <h2>Orçamento</h2>
-    <form id="formulario" novalidate>
+    <h2>Escolha o serviço e gere seu orçamento</h2>
+
+    <section class="servicos-imagens">
+      <div class="servico" data-servico="Instalação">
+        <img src="assets/imagens/instalacao-ar.jpg" alt="Instalação" />
+        <p>Instalação</p>
+      </div>
+
+      <div class="servico" data-servico="Limpeza Split">
+        <img src="assets/imagens/limpeza-split.jpg" alt="Limpeza Split" />
+        <p>Limpeza Split</p>
+      </div>
+
+      <div class="servico" data-servico="Manutenção">
+        <img src="assets/imagens/manutencao-ar.jpg" alt="Manutenção" />
+        <p>Manutenção</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Formulário -->
+  <div class="container">
+    <form id="formulario">
       <label for="nome">Nome:</label>
       <input type="text" id="nome" required />
       <div class="error-message" id="erro-nome"></div>
