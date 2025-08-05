@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: sans-serif;
   background: #f5f5f5;
@@ -6,106 +10,92 @@ body {
 }
 
 .container {
-  max-width: 600px;
-  background: white;
-  padding: 20px;
+  max-width: 800px;
   margin: 20px auto;
+  padding: 20px;
+  background: white;
   border-radius: 10px;
   box-shadow: 0 0 10px #ccc;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.topo-site {
-  background-image: url('imagens/tecnico-trabalhando.jpg');
-  background-size: cover;
-  background-position: center;
-  height: 220px;
+/* TOPO */
+.topo {
   position: relative;
-  color: white;
-}
-
-.topo-site .overlay {
-  background-color: rgba(0, 0, 128, 0.5);
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.topo-site h1 {
-  font-size: 20px;
   text-align: center;
-  padding: 10px;
+  margin-bottom: 10px;
 }
 
-.servicos-imagens {
+.topo-img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+  object-fit: cover;
+  border-bottom: 4px solid #2196F3;
+}
+
+.topo-titulo {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  background: rgba(0, 0, 50, 0.6);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
+
+/* IMAGENS DE SERVIÇO */
+.servicos {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 12px;
-  margin: 20px auto;
-  max-width: 800px;
+  gap: 15px;
+  text-align: center;
 }
 
 .servico {
   flex: 1 1 30%;
-  text-align: center;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 5px #ccc;
+  background: #ffffff;
   padding: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 10px;
   cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 2px solid transparent;
 }
 
 .servico img {
   width: 100%;
-  height: auto;
+  height: 150px;
+  object-fit: cover;
   border-radius: 8px;
 }
 
-.servico:hover,
-.servico:focus {
-  transform: scale(1.03);
-  box-shadow: 0 0 10px #0077cc;
+.servico:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #2196F3;
+  border: 2px solid #2196F3;
 }
 
 .servico p {
-  margin: 10px 0 0;
+  margin-top: 10px;
   font-weight: bold;
+  color: #003366;
 }
 
-.campo {
-  margin-bottom: 15px;
-  position: relative;
-}
-
-label {
+/* FORMULÁRIO */
+form label {
+  font-weight: bold;
   display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
+  margin-top: 15px;
 }
 
 input, select, textarea {
   width: 100%;
   padding: 10px;
-  font-size: 17px;
+  font-size: 16px;
+  margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  box-sizing: border-box;
-}
-
-.error-message {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: red;
-  font-size: 0.85em;
 }
 
 textarea {
@@ -113,46 +103,64 @@ textarea {
 }
 
 button {
-  background-color: #0055aa;
-  color: white;
-  border: none;
   width: 100%;
   padding: 12px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
   border-radius: 8px;
-  font-size: 17px;
+  margin-top: 20px;
+  font-size: 18px;
   cursor: not-allowed;
   opacity: 0.6;
-  transition: 0.3s ease;
+  transition: 0.3s;
 }
 
 button:enabled {
-  opacity: 1;
   cursor: pointer;
+  opacity: 1;
 }
 
-.relatorio {
+/* ERROS DENTRO DO CAMPO */
+.input-erro {
+  position: relative;
+}
+
+.erro-msg {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: red;
+  font-size: 0.9em;
+  background: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* RELATÓRIO */
+.relatorio-box {
   background: #e6f2ff;
   padding: 15px;
   border-left: 5px solid #0055aa;
+  margin-top: 20px;
   white-space: pre-line;
-  margin-bottom: 20px;
-  margin-top: 10px;
+  border-radius: 8px;
 }
 
+/* RESPONSIVO */
 @media (max-width: 768px) {
-  .servico {
-    flex: 1 1 45%;
+  .servicos {
+    flex-direction: column;
   }
-}
 
-@media (max-width: 480px) {
   .servico {
     flex: 1 1 100%;
   }
 
-  .error-message {
-    position: static;
-    transform: none;
-    margin-top: 5px;
+  .topo-titulo {
+    font-size: 18px;
+    padding: 6px 12px;
   }
 }
