@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -16,7 +17,7 @@
     </div>
   </header>
 
-  <!-- Bloco branco com título e imagens -->
+  <!-- Bloco com título e imagens -->
   <div class="container">
     <h2>Escolha o serviço e gere seu orçamento</h2>
 
@@ -73,6 +74,12 @@
         <option value="30000">30.000</option>
       </select>
       <div class="error-message" id="erro-btus"></div>
+
+      <!-- Campo defeito (aparece só em Manutenção) -->
+      <div id="campo-defeito" style="display: none;">
+        <label for="defeito">Descreva o defeito do ar-condicionado:</label>
+        <textarea id="defeito" rows="4" placeholder="Ex: O ar-condicionado não liga ou está com ruído..."></textarea>
+      </div>
 
       <div id="relatorio" style="margin-top: 20px; white-space: pre-line; background: #e6f2ff; padding: 10px; border-left: 5px solid #0055aa;"></div>
 
