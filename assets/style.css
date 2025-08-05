@@ -125,11 +125,13 @@ button:enabled {
   background-color: #0055aa;
 }
 
-/* Mensagem de erro dentro do input (borda vermelha + placeholder vermelho) */
+/* Mensagem de erro dentro do input (borda vermelha + placeholder vermelho) 
 .input-error {
   border-color: #e74c3c !important;
   color: #e74c3c !important;
 }
+*/
+
 
 .input-error::placeholder {
   color: #e74c3c !important;
