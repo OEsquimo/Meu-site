@@ -129,7 +129,7 @@ whatsappInput.addEventListener("input", function (e) {
       mostrarErroInput(nomeInput, "Informe seu nome");
       isValid = false;
     } else {
-      limparErroInput(nomeInput, "Digite seu nome");
+      limparErroInput(nomeInput, "");
     }
 
     // Endereço
