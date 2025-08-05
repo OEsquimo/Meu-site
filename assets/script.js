@@ -1,26 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Seleciona os elementos do DOM
   const form = document.getElementById("formulario");
   const enviarBtn = document.getElementById("enviarBtn");
   const relatorioDiv = document.getElementById("relatorio");
   const nomeInput = document.getElementById("nome");
   const enderecoInput = document.getElementById("endereco");
   const whatsappInput = document.getElementById("whatsapp");
-  const servicoSelect = document.getElementById("servico");
+  const servicoHidden = document.getElementById("servico");
+  const servicosImgs = document.querySelectorAll(".servico");
   const btusSelect = document.getElementById("btus");
   const defeitoTextarea = document.getElementById("defeito");
+  const campoBtus = document.getElementById("campo-btus");
+  const campoDefeito = document.getElementById("campo-defeito");
 
-  // Elementos para mensagens de erro
-  const erroNome = document.getElementById("erro-nome");
-  const erroEndereco = document.getElementById("erro-endereco");
-  const erroWhatsapp = document.getElementById("erro-whatsapp");
-  const erroServico = document.getElementById("erro-servico");
-  const erroBtus = document.getElementById("erro-btus");
-  const erroDefeito = document.getElementById("erro-defeito");
+  const seuWhatsApp = "5581983259341";
 
-  const seuWhatsApp = "5581983259341"; // Seu WhatsApp fixo
-
-  // Função para aplicar máscara simples no campo WhatsApp do cliente
+  // Máscara WhatsApp
   whatsappInput.addEventListener("input", function (e) {
     let v = e.target.value.replace(/\D/g, "");
     if (v.length > 11) v = v.slice(0, 11);
@@ -33,7 +27,67 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Preço base para cada serviço e BTU
+  // Validação WhatsApp
+  function validarWhatsApp(tel) {
+    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
+    return regex.test(tel);
+  }
+
+  // Marcar e desmarcar erro no campo (borda e sombra vermelha)
+  function exibirErroCampo(input) {
+    input.classList.add("input-error");
+  }
+
+  function limparErroCampo(input) {
+    input.classList.remove("input-error");
+  }
+
+  // Limpa erros de todos os campos
+  function limparTodosErros() {
+    [nomeInput, enderecoInput, whatsappInput, btusSelect, defeitoTextarea].forEach(limparErroCampo);
+  }
+
+  // Atualiza visibilidade de campos BTUs e defeito conforme serviço
+  function atualizarCamposPorServico() {
+    const servico = servicoHidden.value;
+
+    if (servico === "Instalação" || servico === "Limpeza Split") {
+      campoBtus.style.display = "block";
+      campoDefeito.style.display = "none";
+      defeitoTextarea.value = "";
+    } else if (servico === "Manutenção") {
+      campoBtus.style.display = "none";
+      btusSelect.value = "";
+      campoDefeito.style.display = "block";
+    } else {
+      campoBtus.style.display = "none";
+      campoDefeito.style.display = "none";
+      btusSelect.value = "";
+      defeitoTextarea.value = "";
+    }
+  }
+
+  // Selecionar serviço com clique nas imagens
+  servicosImgs.forEach((div) => {
+    div.addEventListener("click", () => {
+      servicosImgs.forEach(d => d.classList.remove("selecionado"));
+      div.classList.add("selecionado");
+      servicoHidden.value = div.getAttribute("data-servico");
+      atualizarCamposPorServico();
+      nomeInput.focus();
+      window.scrollTo({ top: nomeInput.offsetTop - 30, behavior: "smooth" });
+      gerarRelatorio();
+    });
+    // Permite selecionar com Enter para acessibilidade
+    div.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        div.click();
+      }
+    });
+  });
+
+  // Função para calcular preço (mesmo do seu script original)
   const precoInstalacao = {
     "9000": 500,
     "12000": 600,
@@ -52,177 +106,109 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const precoLimpezaJanela = 150;
 
-  // Validação do formato WhatsApp
-  function validarWhatsApp(tel) {
-    const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
-    return regex.test(tel);
-  }
-
-  // Calcula o valor do orçamento baseado no serviço e BTU
   function calcularValor(servico, btus) {
-    if (servico === "Instalação") {
-      return precoInstalacao[btus] ?? "";
-    }
-    if (servico === "Limpeza Split") {
-      return precoLimpezaSplit[btus] ?? "";
-    }
-    if (servico === "Limpeza Janela") {
-      return precoLimpezaJanela;
-    }
-    // Para manutenção não tem valor fixo
+    if (servico === "Instalação") return precoInstalacao[btus] ?? "";
+    if (servico === "Limpeza Split") return precoLimpezaSplit[btus] ?? "";
+    if (servico === "Limpeza Janela") return precoLimpezaJanela;
     return "";
   }
 
-  // Função para exibir mensagens de erro dentro dos inputs (com borda vermelha)
-  function exibirErroInput(input, mensagem, elementoErro) {
-    elementoErro.innerText = mensagem;
-    input.classList.add("input-error");
-  }
-
-  // Função para limpar mensagens de erro e borda
-  function limparErroInput(input, elementoErro) {
-    elementoErro.innerText = "";
-    input.classList.remove("input-error");
-  }
-
-  // Função para validar todos os campos do formulário
+  // Validação completa dos campos com exibição de erro dentro do input
   function validarFormulario() {
-    let isValid = true;
+    let valido = true;
 
-    // Validação do campo Nome
+    limparTodosErros();
+
     if (nomeInput.value.trim() === "") {
-      exibirErroInput(nomeInput, "Informe seu nome aqui.", erroNome);
-      isValid = false;
-    } else {
-      limparErroInput(nomeInput, erroNome);
+      exibirErroCampo(nomeInput);
+      valido = false;
     }
-
-    // Validação do campo Endereço
     if (enderecoInput.value.trim() === "") {
-      exibirErroInput(enderecoInput, "Preencha seu endereço.", erroEndereco);
-      isValid = false;
-    } else {
-      limparErroInput(enderecoInput, erroEndereco);
+      exibirErroCampo(enderecoInput);
+      valido = false;
     }
-
-    // Validação do campo WhatsApp
     if (!validarWhatsApp(whatsappInput.value.trim())) {
-      exibirErroInput(whatsappInput, "DDD e número do WhatsApp.", erroWhatsapp);
-      isValid = false;
-    } else {
-      limparErroInput(whatsappInput, erroWhatsapp);
+      exibirErroCampo(whatsappInput);
+      valido = false;
     }
 
-    // Validação do campo Tipo de Serviço
-    if (servicoSelect.value === "") {
-      exibirErroInput(servicoSelect, "Selecione o tipo de serviço.", erroServico);
-      isValid = false;
-    } else {
-      limparErroInput(servicoSelect, erroServico);
+    const servico = servicoHidden.value;
+
+    if (servico === "") {
+      // Se não selecionou serviço, nenhuma validação a mais, pois campo invisível
+      valido = false;
+    } else if (servico === "Instalação" || servico === "Limpeza Split") {
+      if (btusSelect.value === "") {
+        exibirErroCampo(btusSelect);
+        valido = false;
+      }
+    } else if (servico === "Manutenção") {
+      if (defeitoTextarea.value.trim() === "") {
+        exibirErroCampo(defeitoTextarea);
+        valido = false;
+      }
     }
 
-    // Validação do campo BTUs (se não for Limpeza Janela ou Manutenção)
-    if (servicoSelect.value !== "Limpeza Janela" && servicoSelect.value !== "Manutenção" && btusSelect.value === "") {
-      exibirErroInput(btusSelect, "Selecione a capacidade em BTUs.", erroBtus);
-      isValid = false;
-    } else {
-      limparErroInput(btusSelect, erroBtus);
-    }
-
-    // Validação do defeito para manutenção
-    if (servicoSelect.value === "Manutenção" && defeitoTextarea.value.trim() === "") {
-      exibirErroInput(defeitoTextarea, "Descreva o defeito.", erroDefeito);
-      isValid = false;
-    } else {
-      limparErroInput(defeitoTextarea, erroDefeito);
-    }
-
-    return isValid;
+    return valido;
   }
 
-  // Função para gerar relatório e validar campos
+  // Gera o relatório de orçamento no div e habilita botão se válido
   function gerarRelatorio() {
+    if (!validarFormulario()) {
+      relatorioDiv.innerText = "";
+      enviarBtn.disabled = true;
+      return;
+    }
+
     const nome = nomeInput.value.trim();
     const endereco = enderecoInput.value.trim();
-    const whatsappCliente = whatsappInput.value.trim();
-    const servico = servicoSelect.value;
-    const btus = btusSelect.value.trim();
+    const whatsapp = whatsappInput.value.trim();
+    const servico = servicoHidden.value;
+    const btus = btusSelect.value;
     const defeito = defeitoTextarea.value.trim();
 
-    // Atualiza o valor do orçamento automaticamente
-    let valorOrcamento = calcularValor(servico, btus);
+    let valor = calcularValor(servico, btus);
+    if (servico === "Manutenção") valor = "Orçamento sob análise";
 
-    if (servico === "Manutenção") {
-      valorOrcamento = "Orçamento sob análise";
-    }
+    const textoRelatorio = `*ORÇAMENTO*
+👤 Nome: ${nome}
+📍 Endereço: ${endereco}
+📱 WhatsApp: ${whatsapp}
+🛠️ Serviço: ${servico}
+${servico === "Manutenção" ? `🔧 Defeito: ${defeito}` : `❄️ BTUs: ${btus || "N/A"}`}
+💰 Valor do Orçamento: R$ ${valor}
+Obs: Mande esse orçamento para nossa conversa no WhatsApp`;
 
-    // Verifica se todos os dados são válidos para habilitar o botão e exibir o relatório
-    const camposValidosParaRelatorio =
-      nome.length > 0 &&
-      endereco.length > 0 &&
-      validarWhatsApp(whatsappCliente) &&
-      servico.length > 0 &&
-      ((servico === "Limpeza Janela") || (servico === "Manutenção") || btus.length > 0) &&
-      (valorOrcamento !== "" && valorOrcamento !== null);
-
-    if (camposValidosParaRelatorio) {
-      let relatorioTexto = `*ORÇAMENTO*\n👤 Nome: ${nome}\n📍 Endereço: ${endereco}\n📱 WhatsApp: ${whatsappCliente}\n🛠️ Serviço: ${servico}`;
-
-      if (servico === "Manutenção") {
-        relatorioTexto += `\n📝 Defeito: ${defeito}`;
-      } else {
-        relatorioTexto += `\n❄️ BTUs: ${btus || "N/A"}`;
-      }
-
-      relatorioTexto += `\n💰 Valor do Orçamento: R$ ${valorOrcamento}\n        Obs: Mande esse orçamento \n        para nossa conversa \n        no whatsapp`;
-
-      relatorioDiv.innerText = relatorioTexto;
-      enviarBtn.disabled = false;
-      return relatorioTexto;
-    } else {
-      relatorioDiv.innerText = ""; // Limpa o relatório se os campos não forem válidos
-      enviarBtn.disabled = true;
-      return null;
-    }
+    relatorioDiv.innerText = textoRelatorio;
+    enviarBtn.disabled = false;
   }
 
-  // Adiciona listeners para os eventos de input para gerar o relatório e habilitar/desabilitar o botão
-  form.addEventListener("input", gerarRelatorio);
+  // Atualiza relatório e validação quando campos mudam
+  form.addEventListener("input", () => {
+    limparTodosErros();
+    gerarRelatorio();
+  });
 
-  // Listener para o clique do botão Enviar Relatório
-  enviarBtn.addEventListener("click", function () {
-    // Se o formulário não for válido, exibe erros e foca no primeiro campo inválido
+  // Botão enviar orçamento
+  enviarBtn.addEventListener("click", () => {
     if (!validarFormulario()) {
-      if (nomeInput.value.trim() === "") {
-        nomeInput.focus();
-      } else if (enderecoInput.value.trim() === "") {
-        enderecoInput.focus();
-      } else if (!validarWhatsApp(whatsappInput.value.trim())) {
-        whatsappInput.focus();
-      } else if (servicoSelect.value === "") {
-        servicoSelect.focus();
-      } else if ((servicoSelect.value !== "Limpeza Janela" && servicoSelect.value !== "Manutenção") && btusSelect.value === "") {
-        btusSelect.focus();
-      } else if (servicoSelect.value === "Manutenção" && defeitoTextarea.value.trim() === "") {
-        defeitoTextarea.focus();
-      }
-      return; // Impede o envio se a validação falhar
+      gerarRelatorio();
+      // foco no primeiro campo com erro:
+      if (nomeInput.classList.contains("input-error")) nomeInput.focus();
+      else if (enderecoInput.classList.contains("input-error")) enderecoInput.focus();
+      else if (whatsappInput.classList.contains("input-error")) whatsappInput.focus();
+      else if (btusSelect.classList.contains("input-error")) btusSelect.focus();
+      else if (defeitoTextarea.classList.contains("input-error")) defeitoTextarea.focus();
+      return;
     }
 
-    const mensagem = gerarRelatorio();
-    if (mensagem) {
-      const url = `https://wa.me/${seuWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-      window.open(url, "_blank");
-    }
+    const msg = relatorioDiv.innerText;
+    const url = `https://wa.me/${seuWhatsApp}?text=${encodeURIComponent(msg)}`;
+    window.open(url, "_blank");
   });
 
-  // Para limpeza visual do input erro ao digitar
-  [nomeInput, enderecoInput, whatsappInput, servicoSelect, btusSelect, defeitoTextarea].forEach((input) => {
-    input.addEventListener("input", () => {
-      if (input.value.trim() !== "") {
-        limparErroInput(input, document.getElementById("erro-" + input.id));
-      }
-    });
-  });
-
+  // Inicializa campos (esconde btus e defeito)
+  servicoHidden.value = "";
+  atualizarCamposPorServico();
+  enviarBtn.disabled = true;
 });
