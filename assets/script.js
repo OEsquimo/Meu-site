@@ -123,12 +123,21 @@ function mostrarErroInput(input, mensagem) {
     }
 
     // WhatsApp
-    if (!validarWhatsApp(whatsappInput.value.trim())) {
-      mostrarErroInput(whatsappInput, "DDD e número válidos");
-      isValid = false;
-    } else {
-      limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
-    }
+
+const numeroWhatsApp = whatsappInput.value.replace(/\D/g, "");
+if (numeroWhatsApp.length > 0 && numeroWhatsApp.length < 11) {
+  mostrarErroInput(whatsappInput, "DDD e número válidos");
+  isValid = false;
+} else if (numeroWhatsApp.length === 11) {
+  limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
+} else {
+  // Nem mostrar erro nem limpar ainda
+}
+
+
+
+
+    
 
     // Serviço selecionado
     if (servicoSelecionadoInput.value === "") {
