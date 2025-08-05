@@ -3,76 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Orçamento - O Esquimó</title>
+  <title>Orçamento O Esquimó</title>
   <link rel="stylesheet" href="assets/style.css" />
 </head>
 <body>
-  <header class="topo">
-    <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico trabalhando" class="topo-img">
-    <h1 class="topo-titulo">Escolha o serviço e gere seu orçamento</h1>
-  </header>
+  <section class="topo container">
+    <img src="assets/imagens/tecnico-trabalhando.jpg" alt="Técnico mexendo no ar-condicionado" style="width:100%; max-height:250px; object-fit:cover; border-radius:10px;"/>
+  </section>
 
-  <section class="servicos container">
-    <div class="servico" data-servico="Instalação">
+  <section class="servicos-imagens container">
+    <div class="servico" data-servico="Instalação" tabindex="0">
       <img src="assets/imagens/instalacao-ar.jpg" alt="Serviço de Instalação" />
       <p>Instalação</p>
     </div>
-    <div class="servico" data-servico="Limpeza Split">
-      <img src="assets/imagens/limpeza-split.jpg" alt="Limpeza de Ar-Condicionado Split" />
+    <div class="servico" data-servico="Limpeza Split" tabindex="0">
+      <img src="assets/imagens/limpeza-split.jpg" alt="Serviço de Limpeza Split" />
       <p>Limpeza Split</p>
     </div>
-    <div class="servico" data-servico="Manutenção">
-      <img src="assets/imagens/manutencao-ar.jpg" alt="Manutenção de Ar-Condicionado" />
+    <div class="servico" data-servico="Manutenção" tabindex="0">
+      <img src="assets/imagens/manutencao-ar.jpg" alt="Serviço de Manutenção" />
       <p>Manutenção</p>
     </div>
   </section>
 
-  <section class="container formulario-container">
-    <form id="formulario">
-      <input type="hidden" id="servico" />
-      
-      <label for="nome">Nome:</label>
-      <div class="input-erro">
-        <input type="text" id="nome" />
-        <span id="erro-nome" class="erro-msg"></span>
+  <div class="container">
+    <form id="formulario" novalidate>
+      <!-- Campo serviço escondido para o JS -->
+      <input type="hidden" id="servico" name="servico" value=""/>
+
+      <div class="input-container">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" required />
+        <div class="error-message" id="erro-nome"></div>
       </div>
 
-      <label for="endereco">Endereço:</label>
-      <div class="input-erro">
-        <input type="text" id="endereco" />
-        <span id="erro-endereco" class="erro-msg"></span>
+      <div class="input-container">
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" required />
+        <div class="error-message" id="erro-endereco"></div>
       </div>
 
-      <label for="whatsapp">WhatsApp:</label>
-      <div class="input-erro">
-        <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" />
-        <span id="erro-whatsapp" class="erro-msg"></span>
+      <div class="input-container">
+        <label for="whatsapp">WhatsApp:</label>
+        <input type="text" id="whatsapp" placeholder="(xx) xxxxx-xxxx" required />
+        <div class="error-message" id="erro-whatsapp"></div>
       </div>
 
-      <div id="campo-btus">
+      <div id="campo-btus" class="input-container" style="display:none;">
         <label for="btus">Capacidade em BTUs:</label>
-        <div class="input-erro">
-          <select id="btus">
-            <option value="">Selecione</option>
-            <option value="9000">9.000</option>
-            <option value="12000">12.000</option>
-            <option value="18000">18.000</option>
-            <option value="24000">24.000</option>
-            <option value="30000">30.000</option>
-          </select>
-          <span id="erro-btus" class="erro-msg"></span>
-        </div>
+        <select id="btus" name="btus">
+          <option value="">Selecione</option>
+          <option value="9000">9.000</option>
+          <option value="12000">12.000</option>
+          <option value="18000">18.000</option>
+          <option value="24000">24.000</option>
+          <option value="30000">30.000</option>
+        </select>
+        <div class="error-message" id="erro-btus"></div>
       </div>
 
-      <div id="campo-defeito" style="display:none">
+      <div id="campo-defeito" class="input-container" style="display:none;">
         <label for="defeito">Descreva o defeito do ar-condicionado:</label>
-        <textarea id="defeito" rows="3" placeholder="Ex: Ar não está gelando..."></textarea>
+        <textarea id="defeito" rows="3" placeholder="Descreva o problema"></textarea>
+        <div class="error-message" id="erro-defeito"></div>
       </div>
 
-      <div id="relatorio" class="relatorio-box"></div>
+      <div id="relatorio"></div>
+
       <button type="button" id="enviarBtn" disabled>ENVIAR ORÇAMENTO</button>
     </form>
-  </section>
+  </div>
 
   <script src="assets/script.js"></script>
 </body>
