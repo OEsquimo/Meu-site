@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const seuWhatsApp = "5581983259341";
 
   // Máscara WhatsApp
-  whatsappInput.addEventListener("input", function (e) {
+ /* whatsappInput.addEventListener("input", function (e) {
     let v = e.target.value.replace(/\D/g, "");
     if (v.length > 11) v = v.slice(0, 11);
     if (v.length > 6) {
@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
       e.target.value = `(${v}`;
     }
   });
+  */
 
   // Seleção do serviço clicando na imagem
   servicos.forEach(servico => {
