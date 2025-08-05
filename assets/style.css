@@ -67,7 +67,7 @@ button:enabled {
   margin-bottom: 10px;
 }
 
-/* Topo do site com imagem e overlay */
+/* Topo com imagem */
 .topo-site {
   position: relative;
   background: url('../imagens/tecnico-trabalhando.jpg') center center/cover no-repeat;
@@ -80,13 +80,13 @@ button:enabled {
 }
 
 .topo-site .overlay {
-  background-color: rgba(10, 30, 64, 0.7); /* Azul escuro semi-transparente */
+  background-color: rgba(10, 30, 64, 0.7);
   padding: 20px;
   border-radius: 10px;
   max-width: 90%;
 }
 
-/* Chamada serviço */
+/* Chamada */
 .chamada-servico {
   max-width: 600px;
   margin: 30px auto 15px;
@@ -94,10 +94,10 @@ button:enabled {
   color: var(--azul-escuro);
 }
 
-/* Imagens de serviços clicáveis */
+/* Imagens lado a lado */
 .servicos-imagens {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   max-width: 600px;
   margin: 0 auto 30px;
   gap: 15px;
@@ -125,12 +125,10 @@ button:enabled {
   color: var(--azul-escuro);
 }
 
-/* Destaque na imagem selecionada */
 .servico.selected {
   border-color: var(--azul-claro);
 }
 
-/* Responsivo */
 @media (max-width: 720px) {
   .servicos-imagens {
     flex-direction: column;
