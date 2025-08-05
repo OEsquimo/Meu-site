@@ -1,25 +1,29 @@
 document.addEventListener("DOMContentLoaded", function () {
+  const servicos = document.querySelectorAll(".servico");
+  const servicoInput = document.getElementById("servico");
+
   const form = document.getElementById("formulario");
   const enviarBtn = document.getElementById("enviarBtn");
   const relatorioDiv = document.getElementById("relatorio");
+
   const nomeInput = document.getElementById("nome");
   const enderecoInput = document.getElementById("endereco");
   const whatsappInput = document.getElementById("whatsapp");
-  const servicoHidden = document.getElementById("servico");
-  const servicoCards = document.querySelectorAll(".servico");
   const btusSelect = document.getElementById("btus");
-  const campoBtus = document.getElementById("campo-btus");
-  const campoDefeito = document.getElementById("campo-defeito");
-  const defeitoInput = document.getElementById("defeito");
+  const defeitoTextarea = document.getElementById("defeito");
 
   const erroNome = document.getElementById("erro-nome");
   const erroEndereco = document.getElementById("erro-endereco");
   const erroWhatsapp = document.getElementById("erro-whatsapp");
   const erroBtus = document.getElementById("erro-btus");
+  const erroDefeito = document.getElementById("erro-defeito");
+
+  const campoBtus = document.getElementById("campo-btus");
+  const campoDefeito = document.getElementById("campo-defeito");
 
   const seuWhatsApp = "5581983259341";
 
-  // Máscara do WhatsApp
+  // Máscara WhatsApp
   whatsappInput.addEventListener("input", function (e) {
     let v = e.target.value.replace(/\D/g, "");
     if (v.length > 11) v = v.slice(0, 11);
@@ -40,7 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
     "24000": 800,
     "30000": 900,
   };
-
   const precoLimpezaSplit = {
     "9000": 180,
     "12000": 230,
@@ -48,22 +51,23 @@ document.addEventListener("DOMContentLoaded", function () {
     "24000": 330,
     "30000": 380,
   };
-
   const precoLimpezaJanela = 150;
 
+  // Validação WhatsApp
   function validarWhatsApp(tel) {
     const regex = /^\(\d{2}\) \d{5}-\d{4}$/;
     return regex.test(tel);
   }
 
+  // Calcula valor
   function calcularValor(servico, btus) {
     if (servico === "Instalação") return precoInstalacao[btus] ?? "";
     if (servico === "Limpeza Split") return precoLimpezaSplit[btus] ?? "";
     if (servico === "Limpeza Janela") return precoLimpezaJanela;
-    if (servico === "Manutenção") return "Orçamento sob análise";
     return "";
   }
 
+  // Exibir erro dentro do input
   function exibirErro(elementoErro, mensagem) {
     elementoErro.innerText = mensagem;
   }
@@ -72,112 +76,162 @@ document.addEventListener("DOMContentLoaded", function () {
     elementoErro.innerText = "";
   }
 
+  // Validação geral
   function validarFormulario() {
-    let isValid = true;
+    let valido = true;
 
     if (nomeInput.value.trim() === "") {
-      exibirErro(erroNome, "Obrigatório");
-      isValid = false;
+      exibirErro(erroNome, "Informe seu nome.");
+      valido = false;
     } else limparErro(erroNome);
 
     if (enderecoInput.value.trim() === "") {
-      exibirErro(erroEndereco, "Obrigatório");
-      isValid = false;
+      exibirErro(erroEndereco, "Informe seu endereço.");
+      valido = false;
     } else limparErro(erroEndereco);
 
     if (!validarWhatsApp(whatsappInput.value.trim())) {
-      exibirErro(erroWhatsapp, "Formato inválido");
-      isValid = false;
+      exibirErro(erroWhatsapp, "DDD e número válidos.");
+      valido = false;
     } else limparErro(erroWhatsapp);
 
-    const servicoSelecionado = servicoHidden.value;
-
-    if (servicoSelecionado === "Instalação" || servicoSelecionado === "Limpeza Split") {
-      if (btusSelect.value === "") {
-        exibirErro(erroBtus, "Obrigatório");
-        isValid = false;
-      } else limparErro(erroBtus);
+    if (servicoInput.value === "") {
+      // não tem erro visual, pois o serviço é escolhido pelas imagens
+      valido = false;
     }
 
-    return isValid;
+    if (servicoInput.value === "Instalação" || servicoInput.value === "Limpeza Split") {
+      if (btusSelect.value === "") {
+        exibirErro(erroBtus, "Selecione o BTU.");
+        valido = false;
+      } else limparErro(erroBtus);
+
+      // limpar defeito se estava visível antes
+      limparErro(erroDefeito);
+    } else if (servicoInput.value === "Manutenção") {
+      if (defeitoTextarea.value.trim() === "") {
+        exibirErro(erroDefeito, "Descreva o defeito.");
+        valido = false;
+      } else limparErro(erroDefeito);
+
+      // limpar BTUs
+      limparErro(erroBtus);
+    } else {
+      // Caso não selecionado
+      limparErro(erroBtus);
+      limparErro(erroDefeito);
+      valido = false;
+    }
+
+    return valido;
   }
 
+  // Gerar relatório
   function gerarRelatorio() {
     const nome = nomeInput.value.trim();
     const endereco = enderecoInput.value.trim();
-    const whatsappCliente = whatsappInput.value.trim();
-    const servico = servicoHidden.value;
-    const btus = btusSelect.value.trim();
-    const defeito = defeitoInput.value.trim();
+    const whatsapp = whatsappInput.value.trim();
+    const servico = servicoInput.value;
+    const btus = btusSelect.value;
+    const defeito = defeitoTextarea.value.trim();
 
-    let valorOrcamento = calcularValor(servico, btus);
+    let valor = calcularValor(servico, btus);
+    if (servico === "Manutenção") valor = "Orçamento sob análise";
 
-    if (servico === "Manutenção") {
-      valorOrcamento = "Orçamento sob análise";
-    }
-
-    const camposValidosParaRelatorio =
-      nome &&
-      endereco &&
-      validarWhatsApp(whatsappCliente) &&
-      servico &&
-      (
-        (servico === "Instalação" || servico === "Limpeza Split") && btus ||
-        (servico === "Manutenção" && defeito.length > 3)
-      );
-
-    if (camposValidosParaRelatorio) {
-      const relatorioTexto =
-`*ORÇAMENTO*
+    const relatorioTexto = `*ORÇAMENTO*
 👤 Nome: ${nome}
 📍 Endereço: ${endereco}
-📱 WhatsApp: ${whatsappCliente}
+📱 WhatsApp: ${whatsapp}
 🛠️ Serviço: ${servico}
-${servico === "Manutenção" ? `📝 Defeito: ${defeito}` : `❄️ BTUs: ${btus}`}
-💰 Valor: ${valorOrcamento}
+${servico !== "Manutenção" ? `❄️ BTUs: ${btus}` : ""}
+${servico === "Manutenção" ? `⚠️ Defeito: ${defeito}` : ""}
+💰 Valor do Orçamento: R$ ${valor}
+Obs: Envie essa mensagem para nosso WhatsApp.`;
 
-✅ Envie esse orçamento no WhatsApp!`;
+    relatorioDiv.innerText = relatorioTexto;
+  }
 
-      relatorioDiv.innerText = relatorioTexto;
-      enviarBtn.disabled = false;
-      return relatorioTexto;
+  // Atualiza visibilidade dos campos BTU e defeito
+  function atualizarCampos() {
+    const servico = servicoInput.value;
+
+    if (servico === "Instalação" || servico === "Limpeza Split") {
+      campoBtus.style.display = "block";
+      campoDefeito.style.display = "none";
+    } else if (servico === "Manutenção") {
+      campoBtus.style.display = "none";
+      campoDefeito.style.display = "block";
     } else {
-      relatorioDiv.innerText = "";
-      enviarBtn.disabled = true;
-      return null;
+      campoBtus.style.display = "none";
+      campoDefeito.style.display = "none";
     }
   }
 
-  form.addEventListener("input", gerarRelatorio);
+  // Atualiza estado do botão e relatório
+  function atualizarEstado() {
+    if (validarFormulario()) {
+      gerarRelatorio();
+      enviarBtn.disabled = false;
+    } else {
+      relatorioDiv.innerText = "";
+      enviarBtn.disabled = true;
+    }
+  }
 
-  enviarBtn.addEventListener("click", function () {
-    if (!validarFormulario()) return;
+  // Quando o usuário clicar numa imagem de serviço
+  servicos.forEach((div) => {
+    div.addEventListener("click", () => {
+      // Remove a seleção antiga
+      servicos.forEach(s => s.classList.remove("selecionado"));
+      // Marca o clicado
+      div.classList.add("selecionado");
 
-    const mensagem = gerarRelatorio();
+      // Atualiza input escondido
+      servicoInput.value = div.getAttribute("data-servico");
+
+      // Atualiza campos
+      atualizarCampos();
+
+      // Limpa campos opcionais para evitar erros
+      btusSelect.value = "";
+      defeitoTextarea.value = "";
+
+      // Atualiza estado geral do formulário
+      atualizarEstado();
+
+      // Rola suavemente para o nome e foca nele
+      nomeInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      nomeInput.focus();
+    });
+
+    // Também habilitar seleção via teclado Enter/Space
+    div.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        div.click();
+      }
+    });
+  });
+
+  // Sempre que mudar inputs, atualizar
+  form.addEventListener("input", atualizarEstado);
+
+  // Botão enviar
+  enviarBtn.addEventListener("click", () => {
+    if (!validarFormulario()) {
+      // Foca no primeiro campo com erro
+      if (nomeInput.value.trim() === "") nomeInput.focus();
+      else if (enderecoInput.value.trim() === "") enderecoInput.focus();
+      else if (!validarWhatsApp(whatsappInput.value.trim())) whatsappInput.focus();
+      else if ((servicoInput.value === "Instalação" || servicoInput.value === "Limpeza Split") && btusSelect.value === "") btusSelect.focus();
+      else if (servicoInput.value === "Manutenção" && defeitoTextarea.value.trim() === "") defeitoTextarea.focus();
+      return;
+    }
+
+    const mensagem = relatorioDiv.innerText;
     if (mensagem) {
       const url = `https://wa.me/${seuWhatsApp}?text=${encodeURIComponent(mensagem)}`;
       window.open(url, "_blank");
     }
-  });
-
-  // Seleção de serviço por clique nas imagens
-  servicoCards.forEach(card => {
-    card.addEventListener("click", () => {
-      servicoCards.forEach(c => c.classList.remove("selecionado"));
-      card.classList.add("selecionado");
-
-      const servicoSelecionado = card.dataset.servico;
-      servicoHidden.value = servicoSelecionado;
-
-      // Mostrar/ocultar campos
-      campoBtus.style.display = (servicoSelecionado === "Instalação" || servicoSelecionado === "Limpeza Split") ? "block" : "none";
-      campoDefeito.style.display = (servicoSelecionado === "Manutenção") ? "block" : "none";
-
-      // Scroll automático para o campo Nome
-      nomeInput.scrollIntoView({ behavior: "smooth", block: "center" });
-      setTimeout(() => nomeInput.focus(), 600);
-
-      gerarRelatorio();
-    });
   });
 });
