@@ -1,4 +1,4 @@
-7document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
   const servicos = document.querySelectorAll(".servico");
   const servicoSelecionadoInput = document.getElementById("servicoSelecionado");
 
@@ -18,7 +18,17 @@
   const seuWhatsApp = "5581983259341";
 
   // Máscara WhatsApp
-    
+  whatsappInput.addEventListener("input", function (e) {
+    let v = e.target.value.replace(/\D/g, "");
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) {
+      e.target.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+    } else if (v.length > 2) {
+      e.target.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+    } else if (v.length > 0) {
+      e.target.value = `(${v}`;
+    }
+  });
 
   // Seleção do serviço clicando na imagem
   servicos.forEach(servico => {
