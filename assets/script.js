@@ -9,6 +9,17 @@ document.addEventListener("DOMContentLoaded", function () {
   const nomeInput = document.getElementById("nome");
   const enderecoInput = document.getElementById("endereco");
   const whatsappInput = document.getElementById("whatsapp");
+
+// Impedir letras no campo WhatsApp durante a digitação
+whatsappInput.addEventListener("keypress", function (e) {
+  const char = String.fromCharCode(e.which);
+  if (!/\d/.test(char)) {
+    e.preventDefault(); // impede letras e símbolos
+  }
+});
+
+
+  
   const btusSelect = document.getElementById("btus");
   const defeitoTextarea = document.getElementById("defeito");
 
