@@ -10,9 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const enderecoInput = document.getElementById("endereco");
   const whatsappInput = document.getElementById("whatsapp");
 
-// Máscara e bloqueio de letras no campo WhatsApp
-whatsappInput.addEventListener("input", function (e) {
-// Máscara e bloqueio de letras no campo WhatsApp
+
 whatsappInput.addEventListener("input", function () {
   let numeros = this.value.replace(/\D/g, "").slice(0, 11); // mantém no máximo 11 dígitos
 
