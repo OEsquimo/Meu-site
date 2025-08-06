@@ -12,10 +12,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Máscara e bloqueio de letras no campo WhatsApp
 whatsappInput.addEventListener("input", function (e) {
-  let v = this.value.replace(/\D/g, ""); // Remove tudo que não for dígito
+  // Remove tudo que não é número
+  let v = this.value.replace(/\D/g, "");
 
-  if (v.length > 11) v = v.slice(0, 11); // Limita a 11 dígitos
+  // Limita a 11 dígitos
+  if (v.length > 11) v = v.slice(0, 11);
 
+  // Aplica a máscara
   if (v.length > 6) {
     this.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
   } else if (v.length > 2) {
