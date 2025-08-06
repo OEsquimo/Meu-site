@@ -12,21 +12,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Máscara e bloqueio de letras no campo WhatsApp
 whatsappInput.addEventListener("input", function (e) {
-  // Remove tudo que não é número
-  let v = this.value.replace(/\D/g, "");
+// Máscara e bloqueio de letras no campo WhatsApp
+whatsappInput.addEventListener("input", function () {
+  let numeros = this.value.replace(/\D/g, "").slice(0, 11); // mantém no máximo 11 dígitos
 
-  // Limita a 11 dígitos
-  if (v.length > 11) v = v.slice(0, 11);
-
-  // Aplica a máscara
-  if (v.length > 6) {
-    this.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-  } else if (v.length > 2) {
-    this.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-  } else if (v.length > 0) {
-    this.value = `(${v}`;
-  } else {
+  if (numeros.length === 0) {
     this.value = "";
+  } else if (numeros.length <= 2) {
+    this.value = `(${numeros}`;
+  } else if (numeros.length <= 6) {
+    this.value = `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
+  } else {
+    this.value = `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7)}`;
   }
 });
 
