@@ -125,13 +125,12 @@ function mostrarErroInput(input, mensagem) {
     // WhatsApp
 
 const numeroWhatsApp = whatsappInput.value.replace(/\D/g, "");
-if (numeroWhatsApp.length > 0 && numeroWhatsApp.length < 11) {
+
+if (!/^\d{11}$/.test(numeroWhatsApp)) {
   mostrarErroInput(whatsappInput, "DDD e número válidos");
   isValid = false;
-} else if (numeroWhatsApp.length === 11) {
-  limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
 } else {
-  // Nem mostrar erro nem limpar ainda
+  limparErroInput(whatsappInput, "(xx) xxxxx-xxxx");
 }
 
 
