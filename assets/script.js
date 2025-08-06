@@ -11,13 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const whatsappInput = document.getElementById("whatsapp");
 
 // Impedir letras no campo WhatsApp durante a digitação
-whatsappInput.addEventListener("keypress", function (e) {
-  const char = String.fromCharCode(e.which);
-  if (!/\d/.test(char)) {
-    e.preventDefault(); // impede letras e símbolos
-  }
+whatsappInput.addEventListener("input", function (e) {
+  this.value = this.value.replace(/\D/g, "");
 });
 
+  
 
   
   const btusSelect = document.getElementById("btus");
