@@ -22,11 +22,13 @@
 }
 
 .whatsapp-icon {
-  width: 20px; /* menor que antes */
-  height: 20px;
-  margin-right: 8px; /* margem menor */
+  width: 25px !important;     /* ou o tamanho que preferir */
+  height: 25px !important;
+  max-width: none !important;
+  max-height: none !important;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
-
 
 /* Body e container */
 body {
