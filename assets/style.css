@@ -3,6 +3,31 @@
   box-sizing: border-box;
 }
 
+.whatsapp-button {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.whatsapp-button:hover {
+  background-color: #1ebd5a;
+}
+
+.whatsapp-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+
 /* Body e container */
 body {
   font-family: sans-serif;
@@ -166,3 +191,7 @@ select.input-error {
     height: 70px;
   }
 }
+
+
+
+
