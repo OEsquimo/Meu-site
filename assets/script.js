@@ -10,9 +10,21 @@ document.addEventListener("DOMContentLoaded", function () {
   const enderecoInput = document.getElementById("endereco");
   const whatsappInput = document.getElementById("whatsapp");
 
-// Impedir letras no campo WhatsApp durante a digitação
+// Máscara e bloqueio de letras no campo WhatsApp
 whatsappInput.addEventListener("input", function (e) {
-  this.value = this.value.replace(/\D/g, "");
+  let v = this.value.replace(/\D/g, ""); // Remove tudo que não for dígito
+
+  if (v.length > 11) v = v.slice(0, 11); // Limita a 11 dígitos
+
+  if (v.length > 6) {
+    this.value = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+  } else if (v.length > 2) {
+    this.value = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+  } else if (v.length > 0) {
+    this.value = `(${v}`;
+  } else {
+    this.value = "";
+  }
 });
 
   
