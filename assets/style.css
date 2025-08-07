@@ -33,7 +33,7 @@
 /* Body e container */
 body {
   font-family: sans-serif;
-  background-image: url("/assets/imagens/fundo.jpg");
+  background-image: url("./assets/imagens/fundo.jpg");
   margin: 0;
   padding: 0;
 }
